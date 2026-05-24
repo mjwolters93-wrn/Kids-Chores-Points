@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>☀️ Wolters Summer Vacation Points</title>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* ── VARIABLES ── */
+:root {
+  --sun: #FFD93D;
+  --coral: #FF6B6B;
+  --orange: #FF9A3C;
+  --mint: #6BCB77;
+  --sky: #4FC3F7;
+  --purple: #C77DFF;
+  --white: #FFFDF7;
+  --bg: #FFF8E7;
+  --dark: #1A1A2E;
+  --card-border: #F0EDE8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255,217,61,0.12) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(79,195,247,0.12) 0%, transparent 40%);
+  min-height: 100vh;
+  color: var(--dark);
+}
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF9A3C 40%, #FFD93D 100%);
+  padding: 26px 20px 18px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(255,107,107,0.3);
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.04) 10px, rgba(255,255,255,0.04) 20px);
+}
+header h1 {
+  font-family: 'Boogaloo', cursive;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  color: white;
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+  position: relative;
+}
+header p {
+  color: rgba(255,255,255,0.9);
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-top: 4px;
+  position: relative;
+}
+.spin { display: inline-block; animation: spin 10s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── STATUS BAR ── */
+#status-bar {
+  background: rgba(255,255,255,0.85);
+  text-align: center;
+  padding: 6px 16px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #888;
+  border-bottom: 2px solid #FFE0B2;
+  letter-spacing: 0.3px;
+}
+#status-bar.error { color: #D32F2F; background: #FFF0F0; }
+#status-bar.ok { color: #2E7D32; }
+
+/* ── NAV ── */
+nav {
+  display: flex;
+  background: white;
+  border-bottom: 3px solid #FFE0B2;
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  -webkit-overflow-scrolling: touch;
+}
+nav button {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1rem;
+  padding: 13px 18px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #999;
+  white-space: nowrap;
+  border-bottom: 4px solid transparent;
+  margin-bottom: -3px;
+  transition: all 0.2s;
+}
+nav button:hover { background: #FFF8F0; }
+nav button.active { color: var(--dark); border-bottom-color: var(--orange); }
+
+/* ── MAIN ── */
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── CARDS ── */
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 2px solid var(--card-border);
+}
+.section-title {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 9px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tag-required { background: #FFE0E0; color: #C62828; }
+.tag-bonus    { background: #FFF3E0; color: #E65100; }
+.tag-gift     { background: #E8F5E9; color: #2E7D32; }
+
+/* ── NOTE BOX ── */
+.note {
+  background: #FFFDE7;
+  border-left: 4px solid var(--sun);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+/* ── CHORE ROWS ── */
+.chore-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+.chore-row:hover { background: #FFF3E0; }
+.chore-row.done { background: #F0FFF4; }
+.chore-row.done .chore-label { text-decoration: line-through; color: #AAA; }
+.check-box {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  border: 2.5px solid #DDD;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  background: white;
+  transition: all 0.2s;
+}
+.check-box.ticked { background: var(--mint); border-color: var(--mint); color: white; }
+.chore-label { flex: 1; font-weight: 700; font-size: 0.92rem; }
+.pts-pill {
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  background: var(--sun);
+  color: var(--dark);
+}
+.pts-pill.med  { background: #FFB347; }
+.pts-pill.hard { background: #FF8C69; color: white; }
+
+/* ── PROGRESS ── */
+.progress-wrap { margin-top: 12px; }
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+.progress-bg  { background: #EEE; border-radius: 20px; height: 10px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 20px; transition: width 0.4s ease; }
+
+/* ── UNLOCK BANNER ── */
+.unlock-banner {
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  margin-top: 10px;
+  border: 2px dashed;
+}
+.unlock-banner.locked   { background: #FFF8E7; border-color: #FFB347; color: #E65100; }
+.unlock-banner.unlocked { background: #F0FFF4; border-color: var(--mint); color: #2E7D32; }
+
+/* ── KID HEADER ── */
+.kid-header {
+  border-radius: 20px;
+  padding: 18px 22px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: white;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.kid-avatar {
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  border: 3px solid rgba(255,255,255,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.kid-name { font-family: 'Boogaloo', cursive; font-size: 1.7rem; }
+.kid-age  { font-size: 0.8rem; font-weight: 700; opacity: 0.85; }
+.kid-pts-box {
+  margin-left: auto;
+  text-align: center;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 14px;
+  padding: 10px 18px;
+}
+.kid-pts-num   { font-family: 'Boogaloo', cursive; font-size: 2.2rem; line-height: 1; display: block; }
+.kid-pts-label { font-size: 0.68rem; font-weight: 800; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ── BONUS CHORE CARDS ── */
+.bonus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.bonus-card {
+  background: #FFFDF7;
+  border: 2px solid #FFE0B2;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+.bonus-card.claimed { background: #F0FFF4; border-color: var(--mint); }
+.bonus-card.claimed .bonus-label { text-decoration: line-through; color: #AAA; }
+.bonus-check {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  border: 2.5px solid #DDD;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+  background: white;
+  transition: all 0.2s;
+}
+.bonus-card.claimed .bonus-check { background: var(--mint); border-color: var(--mint); color: white; }
+.bonus-label { flex: 1; font-weight: 700; font-size: 0.85rem; }
+.who-select {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.73rem;
+  font-weight: 700;
+  border: 1.5px solid #DDD;
+  border-radius: 8px;
+  padding: 3px 6px;
+  background: white;
+  cursor: pointer;
+}
+
+/* ── REWARDS ── */
+.reward-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.reward-card {
+  background: white;
+  border: 2px solid #EEE;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: all 0.2s;
+}
+.reward-card:hover { border-color: var(--purple); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(199,125,255,0.14); }
+.reward-icon { font-size: 1.8rem; }
+.reward-name { font-weight: 800; font-size: 0.92rem; }
+.reward-desc { font-size: 0.76rem; color: #888; font-weight: 600; line-height: 1.4; flex: 1; }
+.reward-cost {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.cost-pill {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.1rem;
+  background: var(--sun);
+  padding: 2px 12px;
+  border-radius: 20px;
+  border: 2px solid rgba(0,0,0,0.07);
+}
+.cost-label { font-size: 0.72rem; font-weight: 800; color: #AAA; }
+
+/* ── SCOREBOARD ── */
+.score-row {
+  background: white;
+  border-radius: 18px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+  border: 2px solid var(--card-border);
+}
+.score-avatar {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem;
+  flex-shrink: 0;
+}
+.score-name { font-family: 'Boogaloo', cursive; font-size: 1.25rem; flex: 1; }
+.score-bar-wrap { flex: 2; }
+.score-bar-bg  { background: #F0EDE8; border-radius: 20px; height: 14px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 20px; transition: width 0.5s ease; }
+.score-pts {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.5rem;
+  min-width: 72px;
+  text-align: right;
+}
+.score-pts span { font-size: 0.68rem; font-family: 'Nunito', sans-serif; font-weight: 800; color: #AAA; display: block; }
+
+/* ── TIER HEADING ── */
+.tier-heading {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 2px dashed #EEE;
+}
+
+/* ── RESET BTN ── */
+.reset-btn {
+  background: none;
+  border: 2px solid #EEE;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: #AAA;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+.reset-btn:hover { border-color: var(--coral); color: var(--coral); }
+
+/* ── LOADING ── */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.4rem;
+  color: #AAA;
+}
+
+/* ══════════════════════════════════════════════════
+   PRINT STYLES
+   Each kid tab prints as one clean letter-size page
+   ══════════════════════════════════════════════════ */
+@media print {
+  @page { size: letter portrait; margin: 0.6in; }
+
+  body { background: white !important; font-size: 11pt; }
+  header, nav, #status-bar, .reset-btn, .who-select, .score-bar-wrap { display: none !important; }
+
+  /* Show ALL panels when printing */
+  .panel { display: block !important; page-break-after: always; }
+  .panel:last-child { page-break-after: avoid; }
+
+  /* Hide scoreboard & bonus in print — kid charts + rewards only */
+  #panel-scoreboard, #panel-bonus { display: none !important; }
+
+  main { padding: 0; max-width: 100%; }
+
+  .kid-header {
+    background: none !important;
+    color: var(--dark) !important;
+    border: 3px solid #DDD;
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: none;
+  }
+  .kid-avatar { background: #EEE !important; font-size: 1.6rem; width: 48px; height: 48px; }
+  .kid-pts-box { background: #EEE !important; border-color: #CCC; }
+  .kid-pts-num, .kid-pts-label { color: var(--dark) !important; }
+
+  .card { box-shadow: none; border: 1.5px solid #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+
+  .chore-row { padding: 8px 10px; }
+  .check-box { width: 22px; height: 22px; border: 2px solid #999; background: white; }
+  .check-box.ticked { background: white !important; color: transparent !important; }
+  /* Print blank checkboxes so kids can fill by hand */
+  .check-box::after { content: ''; }
+
+  .bonus-card { border: 1.5px solid #CCC; background: white; }
+  .bonus-check { border: 2px solid #999; background: white; }
+  .bonus-check::after { content: ''; }
+
+  .reward-card { border: 1.5px solid #CCC; page-break-inside: avoid; }
+  .reward-grid { grid-template-columns: repeat(3, 1fr); }
+  .bonus-grid  { grid-template-columns: repeat(2, 1fr); }
+
+  .unlock-banner, .note { border: 1.5px solid #CCC; background: #F9F9F9 !important; }
+
+  /* Print header per page */
+  .print-kid-title {
+    font-family: 'Boogaloo', cursive;
+    font-size: 20pt;
+    text-align: center;
+    margin-bottom: 12px;
+    border-bottom: 3px solid #DDD;
+    padding-bottom: 8px;
+  }
+}
+
+/* Hide print title on screen */
+.print-kid-title { display: none; }
+@media print { .print-kid-title { display: block; } }
+
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <h1><span class="spin">☀️</span> Wolters Summer Vacation Points <span class="spin">☀️</span></h1>
+  <p>Do your essentials. Earn your adventure. Spend your summer right.</p>
+</header>
+
+<div id="status-bar">⏳ Loading chore data...</div>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <button class="active" onclick="showTab('scoreboard')">🏆 Scoreboard</button>
+  <button onclick="showTab('penelope')">🌸 Penelope</button>
+  <button onclick="showTab('axel')">⚡ Axel</button>
+  <button onclick="showTab('truett')">🐢 Truett</button>
+  <button onclick="showTab('bonus')">⭐ Bonus Chores</button>
+  <button onclick="showTab('rewards')">🎁 Rewards</button>
+</nav>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- LOADING STATE -->
+  <div id="loading-msg" class="loading">☀️ Loading your summer data...</div>
+
+  <!-- SCOREBOARD -->
+  <div class="panel" id="panel-scoreboard"></div>
+
+  <!-- KID PANELS -->
+  <div class="panel" id="panel-penelope"></div>
+  <div class="panel" id="panel-axel"></div>
+  <div class="panel" id="panel-truett"></div>
+
+  <!-- BONUS -->
+  <div class="panel" id="panel-bonus"></div>
+
+  <!-- REWARDS -->
+  <div class="panel" id="panel-rewards"></div>
+
+</main>
+
+<script>
+// ══════════════════════════════════════════════════════
+// CONFIG — swap in your Sheet ID below
+// ══════════════════════════════════════════════════════
+const SHEET_ID = 'PASTE_YOUR_SHEET_ID_HERE';
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+let DB = { kids:[], essentials:[], truettBonus:[], bonusChores:[], rewards:[], points:{} };
+// Daily check state lives in sessionStorage (resets each browser session / new day)
+let essentialsDone = JSON.parse(sessionStorage.getItem('essentialsDone') || '{}');
+let bonusClaimed   = JSON.parse(sessionStorage.getItem('bonusClaimed')   || '{}');
+
+// ══════════════════════════════════════════════════════
+// SHEET FETCH  (public CSV export)
+// ══════════════════════════════════════════════════════
+function sheetUrl(tabName) {
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
+}
+
+async function fetchCSV(tab) {
+  const r = await fetch(sheetUrl(tab), { cache: 'no-cache' });
+  if (!r.ok) throw new Error(`Cannot load tab "${tab}"`);
+  return parseCSV(await r.text());
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = csvRow(lines[0]);
+  return lines.slice(1).filter(l => l.trim()).map(line => {
+    const vals = csvRow(line);
+    const obj = {};
+    headers.forEach((h, i) => obj[h.trim()] = (vals[i] || '').trim());
+    return obj;
+  });
+}
+
+function csvRow(line) {
+  const cols = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+    else { cur += c; }
+  }
+  cols.push(cur);
+  return cols;
+}
+
+// ══════════════════════════════════════════════════════
+// LOAD ALL DATA
+// ══════════════════════════════════════════════════════
+async function loadAll() {
+  if (SHEET_ID === 'PASTE_YOUR_SHEET_ID_HERE') {
+    setStatus('⚠️ Sheet ID not configured yet — using demo data', 'error');
+    loadDemoData();
+    renderAll();
+    return;
+  }
+  try {
+    setStatus('⏳ Loading...', '');
+    const [kids, essentials, truettBonus, bonusChores, rewards, points] = await Promise.all([
+      fetchCSV('KIDS'),
+      fetchCSV('ESSENTIALS'),
+      fetchCSV('TRUETT_BONUS'),
+      fetchCSV('BONUS_CHORES'),
+      fetchCSV('REWARDS'),
+      fetchCSV('POINTS'),
+    ]);
+    DB.kids        = kids.filter(k => k.active === 'TRUE');
+    DB.essentials  = essentials;
+    DB.truettBonus = truettBonus;
+    DB.bonusChores = bonusChores;
+    DB.rewards     = rewards;
+    DB.points      = {};
+    points.forEach(r => DB.points[r.kid_id] = parseInt(r.points) || 0);
+    setStatus('✓ Data loaded — edit your Google Sheet to update chores & rewards', 'ok');
+    renderAll();
+  } catch(e) {
+    setStatus('⚠️ Could not load Sheet — check it is shared publicly. ' + e.message, 'error');
+    loadDemoData();
+    renderAll();
+  }
+}
+
+function setStatus(msg, cls) {
+  const el = document.getElementById('status-bar');
+  el.textContent = msg;
+  el.className = cls;
+}
+
+// ══════════════════════════════════════════════════════
+// DEMO DATA (fallback / before Sheet is wired up)
+// ══════════════════════════════════════════════════════
+function loadDemoData() {
+  DB.kids = [
+    { kid_id:'penelope', name:'Penelope', age:'8', emoji:'🌸', accent_color:'#FF6B9D' },
+    { kid_id:'axel',     name:'Axel',     age:'6', emoji:'⚡', accent_color:'#4FC3F7' },
+    { kid_id:'truett',   name:'Truett',   age:'3', emoji:'🐢', accent_color:'#6BCB77' },
+  ];
+  DB.essentials = [
+    { kid_id:'penelope', chore_label:"🛏️ Make your bed",                  sort_order:'1' },
+    { kid_id:'penelope', chore_label:"🦷 Brush teeth (morning & night)",   sort_order:'2' },
+    { kid_id:'penelope', chore_label:"👕 Get dressed & put PJs away",      sort_order:'3' },
+    { kid_id:'penelope', chore_label:"🍽️ Clear your plate after meals",    sort_order:'4' },
+    { kid_id:'penelope', chore_label:"🧸 Pick up your stuff before bed",   sort_order:'5' },
+    { kid_id:'penelope', chore_label:"📚 Read for 20 minutes",             sort_order:'6' },
+    { kid_id:'axel', chore_label:"🛏️ Make your bed",                       sort_order:'1' },
+    { kid_id:'axel', chore_label:"🦷 Brush teeth (morning & night)",        sort_order:'2' },
+    { kid_id:'axel', chore_label:"👕 Get dressed & put PJs away",           sort_order:'3' },
+    { kid_id:'axel', chore_label:"🍽️ Clear your plate after meals",         sort_order:'4' },
+    { kid_id:'axel', chore_label:"🧸 Pick up your stuff before bed",        sort_order:'5' },
+    { kid_id:'truett', chore_label:"🛏️ Help make your bed (with Mom or Dad)", sort_order:'1' },
+    { kid_id:'truett', chore_label:"🦷 Brush teeth (with help)",              sort_order:'2' },
+    { kid_id:'truett', chore_label:"👕 Get dressed (try first then ask)",     sort_order:'3' },
+    { kid_id:'truett', chore_label:"🧸 Put your toys away before bed",        sort_order:'4' },
+  ];
+  DB.truettBonus = [
+    { chore_label:"🐕 Help fill the dog's water bowl", pts:'1', sort_order:'1' },
+    { chore_label:"🧺 Carry dirty clothes to laundry room", pts:'1', sort_order:'2' },
+    { chore_label:"🥄 Put silverware away (spoons & forks only)", pts:'1', sort_order:'3' },
+    { chore_label:"🌿 Help water plants outside", pts:'2', sort_order:'4' },
+    { chore_label:"🛒 Help bring in groceries (1–2 bags)", pts:'2', sort_order:'5' },
+    { chore_label:"🧹 Help sweep with little broom", pts:'2', sort_order:'6' },
+  ];
+  DB.bonusChores = [
+    { chore_id:'b1',  chore_label:"🧴 Wipe down bathroom sink & counter", pts:'1', tier:'easy' },
+    { chore_id:'b2',  chore_label:"🗑️ Empty trash cans into big bin",     pts:'1', tier:'easy' },
+    { chore_id:'b3',  chore_label:"🐕 Refill dog food bowl",              pts:'1', tier:'easy' },
+    { chore_id:'b4',  chore_label:"🧹 Sweep kitchen floor",               pts:'2', tier:'easy' },
+    { chore_id:'b5',  chore_label:"📬 Bring in the mail",                 pts:'1', tier:'easy' },
+    { chore_id:'b6',  chore_label:"🧺 Put clean laundry away (your own)", pts:'2', tier:'easy' },
+    { chore_id:'b7',  chore_label:"🥛 Set the table for dinner",          pts:'1', tier:'easy' },
+    { chore_id:'b8',  chore_label:"🌿 Water indoor plants",               pts:'1', tier:'easy' },
+    { chore_id:'b10', chore_label:"🍽️ Unload the dishwasher",            pts:'3', tier:'medium' },
+    { chore_id:'b11', chore_label:"🧹 Vacuum one room",                   pts:'3', tier:'medium' },
+    { chore_id:'b12', chore_label:"🧼 Wipe down kitchen counters",        pts:'3', tier:'medium' },
+    { chore_id:'b13', chore_label:"🛒 Help put away all groceries",       pts:'3', tier:'medium' },
+    { chore_id:'b14', chore_label:"🪣 Mop kitchen floor",                 pts:'4', tier:'medium' },
+    { chore_id:'b15', chore_label:"🧺 Switch laundry (washer → dryer)",   pts:'3', tier:'medium' },
+    { chore_id:'b17', chore_label:"🐕 Brush the dog",                     pts:'3', tier:'medium' },
+    { chore_id:'b19', chore_label:"🧹 Vacuum entire upstairs",            pts:'5', tier:'hard' },
+    { chore_id:'b20', chore_label:"🛁 Full bathroom scrub",               pts:'6', tier:'hard' },
+    { chore_id:'b21', chore_label:"🚗 Wash outside of car",               pts:'6', tier:'hard' },
+    { chore_id:'b22', chore_label:"🪴 Weed front flower bed",             pts:'7', tier:'hard' },
+    { chore_id:'b23', chore_label:"🧺 Full laundry — wash, dry, fold",    pts:'7', tier:'hard' },
+    { chore_id:'b24', chore_label:"🍽️ Cook a simple meal (supervised)",   pts:'8', tier:'hard' },
+  ];
+  DB.rewards = [
+    { reward_id:'r1',  category:'food',       icon:'🍦', name:'Ice Cream Run',       description:"Trip to Braum's or DQ.",    pts:'8',  giftable:'TRUE' },
+    { reward_id:'r2',  category:'food',       icon:'🍩', name:'Donut Morning',        description:'Saturday donut run.',       pts:'6',  giftable:'TRUE' },
+    { reward_id:'r3',  category:'food',       icon:'🍕', name:'Dessert Dinner',       description:'Dessert BEFORE dinner.',    pts:'10', giftable:'FALSE' },
+    { reward_id:'r4',  category:'food',       icon:'🧃', name:'Sonic Happy Hour',     description:'Slushes and tots.',         pts:'5',  giftable:'FALSE' },
+    { reward_id:'r6',  category:'screen',     icon:'🎬', name:'Movie Theater Trip',   description:'You pick. Popcorn included.', pts:'20', giftable:'TRUE' },
+    { reward_id:'r7',  category:'screen',     icon:'📽️', name:'Movie Rental Night',  description:'Rent any new release.',     pts:'10', giftable:'TRUE' },
+    { reward_id:'r8',  category:'screen',     icon:'🕹️', name:'Gaming Session',      description:'1-hour extra session.',     pts:'8',  giftable:'FALSE' },
+    { reward_id:'r9',  category:'screen',     icon:'📺', name:'Extra Screen Time',    description:'30 extra minutes.',         pts:'5',  giftable:'FALSE' },
+    { reward_id:'r10', category:'home',       icon:'🏕️', name:'Carpet Picnic',       description:'Pizza on the carpet + movie.', pts:'15', giftable:'TRUE' },
+    { reward_id:'r11', category:'home',       icon:'⛺', name:'Backyard Campout',     description:'Tent + sleeping bags outside.', pts:'18', giftable:'TRUE' },
+    { reward_id:'r12', category:'home',       icon:'🏰', name:'Fort Night',           description:'Full living room fort.',    pts:'10', giftable:'TRUE' },
+    { reward_id:'r13', category:'home',       icon:'🌙', name:'Stay Up Late Pass',    description:'30 min past bedtime.',      pts:'6',  giftable:'FALSE' },
+    { reward_id:'r15', category:'outings',    icon:'🤸', name:'Trampoline Park',      description:'Sky Zone or Jump Street.',  pts:'25', giftable:'TRUE' },
+    { reward_id:'r16', category:'outings',    icon:'🎳', name:'Bowling Trip',         description:'One game, shoes included.', pts:'20', giftable:'TRUE' },
+    { reward_id:'r17', category:'outings',    icon:'🕹️', name:'Arcade Day',          description:'$10 in tokens.',            pts:'20', giftable:'TRUE' },
+    { reward_id:'r18', category:'outings',    icon:'💦', name:'Splash Pad Day',       description:'You pick the splash pad.',  pts:'15', giftable:'TRUE' },
+    { reward_id:'r20', category:'privileges', icon:'👨‍🍳', name:'Pick Dinner',       description:'You choose dinner tonight.', pts:'10', giftable:'TRUE' },
+    { reward_id:'r21', category:'privileges', icon:'🛋️', name:'No-Chore Pass',       description:'One full day off.',         pts:'20', giftable:'TRUE' },
+    { reward_id:'r22', category:'privileges', icon:'👫', name:'Friend Sleepover',     description:'Invite one friend over.',   pts:'18', giftable:'FALSE' },
+    { reward_id:'r24', category:'privileges', icon:'🎉', name:'You Plan the Day',     description:"Family follows your agenda.", pts:'25', giftable:'FALSE' },
+    { reward_id:'r25', category:'parent',     icon:'👨‍👧', name:'Daddy Date',        description:'One-on-one with Dad.',      pts:'15', giftable:'FALSE' },
+    { reward_id:'r26', category:'parent',     icon:'👩‍👧', name:'Mommy Date',        description:'One-on-one with Mom.',      pts:'15', giftable:'FALSE' },
+    { reward_id:'r27', category:'parent',     icon:'🎯', name:'Choose Family Activity', description:'You pick the afternoon.',  pts:'12', giftable:'TRUE' },
+    { reward_id:'r28', category:'parent',     icon:'📖', name:'Extra Bedtime Stories', description:'3 extra books tonight.',   pts:'5',  giftable:'FALSE' },
+    { reward_id:'r29', category:'parent',     icon:'🍳', name:'Cook Together',         description:'Your recipe with Mom/Dad.', pts:'10', giftable:'FALSE' },
+  ];
+  DB.points = { penelope:0, axel:0, truett:0 };
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER ALL
+// ══════════════════════════════════════════════════════
+function renderAll() {
+  document.getElementById('loading-msg').style.display = 'none';
+  renderScoreboard();
+  DB.kids.forEach(kid => renderKid(kid));
+  renderBonus();
+  renderRewards();
+  showTab('scoreboard');
+}
+
+// ── SCOREBOARD ──
+function renderScoreboard() {
+  const el = document.getElementById('panel-scoreboard');
+  const maxPts = Math.max(1, ...DB.kids.map(k => DB.points[k.kid_id] || 0));
+  const grads = {
+    penelope: 'linear-gradient(90deg,#FF6B9D,#FF9A3C)',
+    axel:     'linear-gradient(90deg,#4FC3F7,#4A90E2)',
+    truett:   'linear-gradient(90deg,#6BCB77,#3AB44A)',
+  };
+  const bgColors = {
+    penelope: 'rgba(255,107,157,0.12)',
+    axel:     'rgba(79,195,247,0.12)',
+    truett:   'rgba(107,203,119,0.12)',
+  };
+  let rows = DB.kids.map(kid => {
+    const pts = DB.points[kid.kid_id] || 0;
+    const pct = Math.round((pts / maxPts) * 100);
+    return `
+      <div class="score-row">
+        <div class="score-avatar" style="background:${bgColors[kid.kid_id]}">${kid.emoji}</div>
+        <div class="score-name">${kid.name}</div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-bg">
+            <div class="score-bar-fill" style="background:${grads[kid.kid_id]};width:${pct}%"></div>
+          </div>
+        </div>
+        <div class="score-pts">${pts} <span>points</span></div>
+      </div>`;
+  }).join('');
+  el.innerHTML = `
+    <div style="font-family:'Boogaloo',cursive;font-size:1.7rem;text-align:center;margin-bottom:20px">🏆 Summer Points Leaderboard</div>
+    ${rows}
+    <div class="card" style="margin-top:24px">
+      <div class="section-title">📋 House Rules</div>
+      <ul style="padding-left:20px;font-size:0.88rem;line-height:2.1;color:#555;font-weight:600">
+        <li><strong>Essentials first</strong> — daily required chores must be done before bonus chores unlock.</li>
+        <li><strong>Bonus chores = Vacation Points</strong> — harder chores earn more points.</li>
+        <li><strong>Points are yours</strong> — each kid tracks their own balance all summer long.</li>
+        <li><strong>Gift rule</strong> — you CAN spend your points to buy a reward for a sibling. 🤝</li>
+        <li><strong>Summer expiration</strong> — all unspent points expire when school starts. Spend 'em or lose 'em!</li>
+        <li><strong>No shortcuts</strong> — skipping essentials = no bonus chores that day, no exceptions.</li>
+      </ul>
+    </div>`;
+}
+
+// ── KID PANELS ──
+const kidGrads = {
+  penelope: 'linear-gradient(135deg,#FF6B9D,#FF9A3C)',
+  axel:     'linear-gradient(135deg,#4FC3F7,#4A90E2)',
+  truett:   'linear-gradient(135deg,#6BCB77,#3AB44A)',
+};
+const kidFills = {
+  penelope: 'linear-gradient(90deg,#FF6B9D,#FF9A3C)',
+  axel:     'linear-gradient(90deg,#4FC3F7,#4A90E2)',
+  truett:   'linear-gradient(90deg,#6BCB77,#3AB44A)',
+};
+
+function renderKid(kid) {
+  const id = kid.kid_id;
+  const el = document.getElementById('panel-' + id);
+  const essentials = DB.essentials
+    .filter(e => e.kid_id === id)
+    .sort((a,b) => parseInt(a.sort_order) - parseInt(b.sort_order));
+  const done = essentialsDone[id] || [];
+  const total = essentials.length;
+  const doneCount = done.length;
+  const pct = total ? Math.round((doneCount/total)*100) : 0;
+  const unlocked = doneCount >= total;
+  const pts = DB.points[id] || 0;
+
+  const essentialRows = essentials.map((e,i) => {
+    const isDone = done.includes(i);
+    return `<div class="chore-row${isDone?' done':''}" onclick="toggleEssential('${id}',${i},${total})">
+      <div class="check-box${isDone?' ticked':''}">${isDone?'✓':''}</div>
+      <div class="chore-label">${e.chore_label}</div>
+    </div>`;
+  }).join('');
+
+  // Truett bonus chores
+  let truettSection = '';
+  if (id === 'truett') {
+    const tRows = DB.truettBonus
+      .sort((a,b) => parseInt(a.sort_order)-parseInt(b.sort_order))
+      .map((c,i) => {
+        const key = 'truett_bonus_' + i;
+        const isDone = !!(bonusClaimed[key]);
+        const pts = parseInt(c.pts)||1;
+        return `<div class="chore-row${isDone?' done':''}" onclick="toggleTruettBonus(${i},'${key}',${pts})">
+          <div class="check-box${isDone?' ticked':''}">${isDone?'✓':''}</div>
+          <div class="chore-label">${c.chore_label}</div>
+          <div class="pts-pill">${pts} pt${pts>1?'s':''}</div>
+        </div>`;
+      }).join('');
+    truettSection = `
+      <div class="card">
+        <div class="section-title">⭐ Truett's Special Bonus Jobs <span class="tag tag-bonus">Earns Points!</span></div>
+        <div class="note">Truett-sized jobs he can do on his own or with a little guidance.</div>
+        ${tRows}
+        <button class="reset-btn" onclick="resetTruettBonus()">↺ Reset Truett's Bonus Chores</button>
+      </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="print-kid-title">${kid.emoji} ${kid.name}'s Chore Chart — Summer 2026</div>
+    <div class="kid-header" style="background:${kidGrads[id]}">
+      <div class="kid-avatar">${kid.emoji}</div>
+      <div>
+        <div class="kid-name">${kid.name}</div>
+        <div class="kid-age">Age ${kid.age}</div>
+      </div>
+      <div class="kid-pts-box">
+        <span class="kid-pts-num" id="pts-display-${id}">${pts}</span>
+        <span class="kid-pts-label">⭐ Points</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">📋 Daily Essentials <span class="tag tag-required">Required — No Points</span></div>
+      <div class="note">Complete ALL of these before bonus chores unlock.</div>
+      ${essentialRows}
+      <div class="progress-wrap">
+        <div class="progress-labels"><span>Daily Progress</span><span id="prog-text-${id}">${doneCount} / ${total}</span></div>
+        <div class="progress-bg"><div class="progress-fill" id="prog-bar-${id}" style="background:${kidFills[id]};width:${pct}%"></div></div>
+      </div>
+      <div class="unlock-banner ${unlocked?'unlocked':'locked'}" id="unlock-banner-${id}">
+        ${unlocked ? '🎉 Essentials complete! Bonus chores are unlocked!' : `🔒 ${total-doneCount} more to unlock bonus chores!`}
+      </div>
+    </div>
+    ${truettSection}
+    <button class="reset-btn" onclick="resetEssentials('${id}',${total})">↺ Reset Today's Essentials</button>`;
+}
+
+// ── BONUS ──
+function renderBonus() {
+  const el = document.getElementById('panel-bonus');
+  const tiers = [
+    { key:'easy',   label:'🟡 Quick & Easy',  range:'1–2 pts', color:'#F59E0B' },
+    { key:'medium', label:'🟠 Medium Effort', range:'3–4 pts', color:'#F97316' },
+    { key:'hard',   label:'🔴 Big Jobs',      range:'5+ pts',  color:'#EF4444' },
+  ];
+  const kidOptions = DB.kids.map(k => `<option value="${k.kid_id}">${k.emoji} ${k.name}</option>`).join('');
+
+  let html = `<div class="card">
+    <div class="section-title">⭐ Bonus Chore Menu <span class="tag tag-bonus">Tiered Points</span></div>
+    <div class="note">Anyone can grab from this list after essentials are done. Choose who did it — points go to their balance.</div>`;
+
+  tiers.forEach(tier => {
+    const chores = DB.bonusChores.filter(c => c.tier === tier.key);
+    const cards = chores.map(c => {
+      const pts = parseInt(c.pts)||1;
+      const claimed = bonusClaimed[c.chore_id];
+      const pillCls = tier.key==='hard'?'hard':tier.key==='medium'?'med':'';
+      const claimedKid = claimed ? DB.kids.find(k=>k.kid_id===claimed) : null;
+      return `<div class="bonus-card${claimed?' claimed':''}" id="bc-${c.chore_id}">
+        <div class="bonus-check">${claimed?'✓':''}</div>
+        <div class="bonus-label">${c.chore_label}</div>
+        <div class="pts-pill ${pillCls}">${pts} pt${pts>1?'s':''}</div>
+        <select class="who-select" onchange="claimBonus('${c.chore_id}',this,${pts})">
+          <option value="">${claimed && claimedKid ? claimedKid.emoji+' '+claimedKid.name : 'Who?'}</option>
+          ${kidOptions}
+          ${claimed ? '<option value="__unclaim">↩ Unclaim</option>' : ''}
+        </select>
+      </div>`;
+    }).join('');
+    html += `<div class="tier-heading" style="color:${tier.color}">${tier.label} <span style="font-size:0.8rem;color:#AAA;font-family:'Nunito',sans-serif;font-weight:700">${tier.range}</span></div>
+      <div class="bonus-grid">${cards}</div>`;
+  });
+  html += `</div><button class="reset-btn" onclick="resetBonus()">↺ Reset All Bonus Chores</button>`;
+  el.innerHTML = html;
+}
+
+// ── REWARDS ──
+const REWARD_CATS = {
+  food:       '🍦 Food & Treat Experiences',
+  screen:     '🎬 Screen & Entertainment',
+  home:       '🏕️ At-Home Experiences',
+  outings:    '🎡 Outings & Adventures',
+  privileges: '👑 Special Privileges',
+  parent:     '❤️ Parent Time',
+};
+
+function renderRewards() {
+  const el = document.getElementById('panel-rewards');
+  let html = `<div style="background:linear-gradient(135deg,#C77DFF22,#FF6B6B11);border:2px solid #C77DFF44;border-radius:16px;padding:14px 18px;margin-bottom:20px;font-weight:700;color:#555;font-size:0.88rem;line-height:1.7">
+    <strong style="color:#1A1A2E">🎁 The Rewards Store</strong> — spend your vacation points on something awesome.<br>
+    <strong>Gift rule:</strong> you can spend your own points to buy a reward for a sibling 🤝 — giftable rewards are tagged.
+  </div>`;
+
+  Object.entries(REWARD_CATS).forEach(([cat, label]) => {
+    const rewards = DB.rewards.filter(r => r.category === cat);
+    if (!rewards.length) return;
+    const cards = rewards.map(r => {
+      const isGiftable = r.giftable === 'TRUE';
+      return `<div class="reward-card">
+        <div class="reward-icon">${r.icon}</div>
+        <div class="reward-name">${r.name}${isGiftable?' <span class="tag tag-gift">🤝 giftable</span>':''}</div>
+        <div class="reward-desc">${r.description}</div>
+        <div class="reward-cost">
+          <span class="cost-pill">${r.pts}</span>
+          <span class="cost-label">points</span>
+        </div>
+      </div>`;
+    }).join('');
+    html += `<div style="margin-bottom:26px">
+      <div class="tier-heading" style="font-family:'Boogaloo',cursive;font-size:1.2rem;margin-bottom:10px;padding-bottom:6px;border-bottom:2px dashed #EEE">${label}</div>
+      <div class="reward-grid">${cards}</div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════
+// INTERACTIVITY
+// ══════════════════════════════════════════════════════
+function toggleEssential(kidId, idx, total) {
+  if (!essentialsDone[kidId]) essentialsDone[kidId] = [];
+  const done = essentialsDone[kidId];
+  const pos = done.indexOf(idx);
+  if (pos > -1) done.splice(pos,1); else done.push(idx);
+  sessionStorage.setItem('essentialsDone', JSON.stringify(essentialsDone));
+  // Re-render just this kid's panel
+  const kid = DB.kids.find(k => k.kid_id === kidId);
+  renderKid(kid);
+}
+
+function resetEssentials(kidId, total) {
+  essentialsDone[kidId] = [];
+  sessionStorage.setItem('essentialsDone', JSON.stringify(essentialsDone));
+  const kid = DB.kids.find(k => k.kid_id === kidId);
+  renderKid(kid);
+}
+
+function toggleTruettBonus(idx, key, pts) {
+  if (bonusClaimed[key]) {
+    delete bonusClaimed[key];
+    DB.points['truett'] = Math.max(0, (DB.points['truett']||0) - pts);
+  } else {
+    bonusClaimed[key] = true;
+    DB.points['truett'] = (DB.points['truett']||0) + pts;
+  }
+  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
+  renderKid(DB.kids.find(k=>k.kid_id==='truett'));
+  renderScoreboard();
+}
+
+function resetTruettBonus() {
+  DB.truettBonus.forEach((c,i) => {
+    const key = 'truett_bonus_' + i;
+    if (bonusClaimed[key]) {
+      DB.points['truett'] = Math.max(0, (DB.points['truett']||0) - (parseInt(c.pts)||1));
+      delete bonusClaimed[key];
+    }
+  });
+  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
+  renderKid(DB.kids.find(k=>k.kid_id==='truett'));
+  renderScoreboard();
+}
+
+function claimBonus(choreId, selectEl, pts) {
+  const val = selectEl.value;
+  const prev = bonusClaimed[choreId];
+
+  if (val === '__unclaim') {
+    if (prev) {
+      DB.points[prev] = Math.max(0, (DB.points[prev]||0) - pts);
+      delete bonusClaimed[choreId];
+    }
+  } else if (val) {
+    if (prev && prev !== val) {
+      DB.points[prev] = Math.max(0, (DB.points[prev]||0) - pts);
+    }
+    if (!prev || prev !== val) {
+      DB.points[val] = (DB.points[val]||0) + pts;
+    }
+    bonusClaimed[choreId] = val;
+  }
+
+  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
+  // Update points displays without full re-render
+  DB.kids.forEach(k => {
+    const d = document.getElementById('pts-display-' + k.kid_id);
+    if (d) d.textContent = DB.points[k.kid_id] || 0;
+  });
+  renderBonus();
+  renderScoreboard();
+}
+
+function resetBonus() {
+  Object.keys(bonusClaimed).forEach(key => {
+    if (key.startsWith('b')) {
+      const chore = DB.bonusChores.find(c => c.chore_id === key);
+      if (chore && bonusClaimed[key]) {
+        const kid = bonusClaimed[key];
+        DB.points[kid] = Math.max(0, (DB.points[kid]||0) - (parseInt(chore.pts)||1));
+      }
+      delete bonusClaimed[key];
+    }
+  });
+  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
+  renderBonus();
+  renderScoreboard();
+  DB.kids.forEach(k => renderKid(k));
+}
+
+// ── TAB SWITCHER ──
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  const btns = document.querySelectorAll('nav button');
+  const map = ['scoreboard','penelope','axel','truett','bonus','rewards'];
+  btns[map.indexOf(name)]?.classList.add('active');
+}
+
+// ── BOOT ──
+window.addEventListener('DOMContentLoaded', loadAll);
+</script>
+</body>
+</html>
