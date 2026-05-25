@@ -7,61 +7,66 @@
 <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body { font-family: 'Nunito', sans-serif; background: #F0F0F0; color: #1A1A2E; }
 
-/* ── TOOLBAR (screen only) ── */
+/* ── TOOLBAR ── */
 #toolbar {
   background: linear-gradient(135deg,#FF6B6B,#FF9A3C);
-  padding: 14px 24px; display: flex; align-items: center; gap: 14px;
-  box-shadow: 0 3px 12px rgba(255,107,107,0.3); position: sticky; top: 0; z-index: 100;
+  padding:14px 24px; display:flex; align-items:center; gap:14px;
+  box-shadow:0 3px 12px rgba(255,107,107,0.3);
+  position:sticky; top:0; z-index:100;
 }
 #toolbar h1 { font-family:'Boogaloo',cursive; font-size:1.3rem; color:white; flex:1; }
-.tbtn { font-family:'Boogaloo',cursive; font-size:0.95rem; padding:8px 18px; border-radius:10px; border:none; cursor:pointer; transition:all 0.2s; }
-.tbtn.print { background:white; color:#FF6B6B; }
-.tbtn.back  { background:rgba(255,255,255,0.2); color:white; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
-.tbtn:hover { opacity:0.9; transform:translateY(-1px); }
+.tbtn { font-family:'Boogaloo',cursive; font-size:0.95rem; padding:8px 18px; border-radius:10px; border:none; cursor:pointer; }
+.tbtn.back { background:rgba(255,255,255,0.2); color:white; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.tbtn.back:hover { background:rgba(255,255,255,0.3); }
 
-#tip {
-  background:#FFF8E7; border-bottom:2px solid #FFD93D;
-  padding:7px 20px; font-size:0.8rem; font-weight:700; color:#888; text-align:center;
-}
-
+#tip { background:#FFF8E7; border-bottom:2px solid #FFD93D; padding:7px 20px; font-size:0.8rem; font-weight:700; color:#888; text-align:center; }
 #status { background:white; text-align:center; padding:7px; font-size:0.78rem; font-weight:800; color:#888; border-bottom:2px solid #EEE; }
 #status.ok { color:#2E7D32; } #status.err { color:#C62828; background:#FFF0F0; }
-
 #loading { text-align:center; padding:80px 20px; font-family:'Boogaloo',cursive; font-size:1.4rem; color:#AAA; }
 
-/* ── PAGES WRAPPER ── */
-#pages { padding:32px 24px 60px; display:flex; flex-direction:column; align-items:center; gap:40px; }
-.page-label { font-family:'Boogaloo',cursive; font-size:0.82rem; color:#AAA; letter-spacing:2px; text-transform:uppercase; text-align:center; margin-bottom:8px; }
+/* ── PAGE CARDS (screen) ── */
+#pages { padding:32px 24px 60px; display:flex; flex-direction:column; align-items:center; gap:32px; }
 
-/* ── LETTER PAGE ── */
+.page-wrapper { width:816px; }
+
+.page-toolbar {
+  background:white; border-radius:14px 14px 0 0;
+  padding:12px 20px; display:flex; align-items:center; justify-content:space-between;
+  border:2px solid #EEE; border-bottom:none;
+}
+.page-toolbar-label { font-family:'Boogaloo',cursive; font-size:1rem; color:#888; }
+.print-page-btn {
+  font-family:'Boogaloo',cursive; font-size:0.95rem;
+  background:linear-gradient(135deg,#FF6B6B,#FF9A3C);
+  color:white; border:none; border-radius:10px;
+  padding:7px 18px; cursor:pointer;
+  box-shadow:0 2px 8px rgba(255,107,107,0.25);
+  transition:all 0.2s;
+}
+.print-page-btn:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(255,107,107,0.35); }
+
+/* ── THE ACTUAL PAGE ── */
 .page {
   width:816px; background:white;
-  box-shadow:0 6px 32px rgba(0,0,0,0.16);
+  box-shadow:0 6px 32px rgba(0,0,0,0.13);
   padding:48px 54px 40px;
   display:flex; flex-direction:column;
-  position:relative; overflow:hidden;
+  border:2px solid #EEE; border-top:none;
+  border-radius:0 0 14px 14px;
 }
 
-/* ── KID PAGE ── */
-.page-header {
-  display:flex; align-items:center; gap:16px;
-  padding-bottom:13px; margin-bottom:16px; flex-shrink:0;
-  border-bottom:4px solid #DDD;
-}
+/* ── KID PAGE ELEMENTS ── */
+.page-header { display:flex; align-items:center; gap:16px; padding-bottom:13px; margin-bottom:16px; flex-shrink:0; border-bottom:4px solid #DDD; }
 .hdr-emoji { font-size:2.8rem; line-height:1; flex-shrink:0; }
 .hdr-text h2 { font-family:'Boogaloo',cursive; font-size:1.9rem; color:#1A1A2E; line-height:1; }
 .hdr-text p  { font-size:0.75rem; font-weight:700; color:#AAA; margin-top:3px; }
-.week-box {
-  margin-left:auto; flex-shrink:0;
-  border:2px solid #DDD; border-radius:8px; padding:7px 16px; text-align:center; min-width:128px;
-}
+.week-box { margin-left:auto; flex-shrink:0; border:2px solid #DDD; border-radius:8px; padding:7px 16px; text-align:center; min-width:128px; }
 .week-box .wl { font-size:0.58rem; font-weight:800; color:#AAA; text-transform:uppercase; letter-spacing:1px; }
 .week-box .ws { display:block; font-family:'Boogaloo',cursive; font-size:0.95rem; color:#1A1A2E; margin-top:3px; border-bottom:1.5px solid #CCC; min-height:20px; }
 
-.sec-bar { font-family:'Boogaloo',cursive; font-size:0.95rem; color:white; padding:6px 13px; border-radius:7px; margin-bottom:8px; flex-shrink:0; }
+.sec-bar { font-family:'Boogaloo',cursive; font-size:0.95rem; color:white; padding:6px 13px; border-radius:7px; margin-bottom:8px; flex-shrink:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 
 .chore-table { width:100%; border-collapse:collapse; flex-shrink:0; }
 .chore-table th { font-size:0.72rem; font-weight:800; text-align:center; padding:5px 2px; border:1.5px solid #DDD; width:38px; color:#444; }
@@ -75,82 +80,51 @@ body { font-family: 'Nunito', sans-serif; background: #F0F0F0; color: #1A1A2E; }
 .divider { border:none; border-top:1.5px dashed #E0E0E0; margin:12px 0; flex-shrink:0; }
 
 .bonus-section { flex:1; display:flex; flex-direction:column; min-height:0; }
-.ruled-area { flex:1; display:flex; flex-direction:column; justify-content:space-around; padding:2px 0; }
-.ruled-line { display:flex; align-items:flex-end; gap:10px; padding-bottom:4px; border-bottom:1.5px solid #E4E4E4; }
+.ruled-area { flex:1; display:flex; flex-direction:column; justify-content:space-around; padding:2px 0; min-height:280px; }
+.ruled-line { display:flex; align-items:flex-end; gap:10px; padding-bottom:5px; border-bottom:1.5px solid #E4E4E4; }
 .rl-num { font-size:0.68rem; font-weight:800; color:#CCC; width:14px; flex-shrink:0; }
 .rl-line { flex:1; }
 .rl-pts { font-size:0.65rem; font-weight:800; color:#BBB; flex-shrink:0; white-space:nowrap; }
 .rl-box { width:38px; height:20px; border:1.5px solid #CCC; border-radius:3px; flex-shrink:0; }
 
-.pts-footer { flex-shrink:0; border-top:2px dashed #DDD; padding-top:11px; margin-top:8px; display:flex; align-items:center; gap:16px; }
+.pts-footer { flex-shrink:0; border-top:2px dashed #DDD; padding-top:11px; margin-top:10px; display:flex; align-items:center; gap:16px; }
 .pf-label { font-family:'Boogaloo',cursive; font-size:1rem; color:#888; white-space:nowrap; }
 .pf-total { border:2.5px solid #DDD; border-radius:8px; padding:5px 16px; text-align:center; min-width:90px; }
 .pf-total .ptl { font-size:0.58rem; font-weight:800; color:#AAA; text-transform:uppercase; letter-spacing:1px; }
 .pf-total .ptv { display:block; font-family:'Boogaloo',cursive; font-size:1.3rem; color:#1A1A2E; border-bottom:1.5px solid #CCC; min-height:24px; }
 .pf-note { margin-left:auto; font-size:0.67rem; font-weight:700; color:#CCC; max-width:200px; text-align:right; line-height:1.5; }
-.page-foot { flex-shrink:0; text-align:center; font-size:0.58rem; font-weight:800; color:#DDD; letter-spacing:0.5px; margin-top:10px; }
+.page-foot { flex-shrink:0; text-align:center; font-size:0.58rem; font-weight:800; color:#DDD; letter-spacing:0.5px; margin-top:12px; }
 
-/* ── BONUS CHORE MENU PAGE ── */
-.bonus-page-header {
-  display:flex; align-items:center; gap:0;
-  margin-bottom:16px; flex-shrink:0;
-}
-.bonus-page-title {
-  font-family:'Boogaloo',cursive; font-size:1.8rem; color:#1A1A2E; flex:1;
-}
-.bonus-page-sub { font-size:0.72rem; font-weight:700; color:#AAA; margin-top:2px; }
-
-.tier-section { margin-bottom:14px; flex-shrink:0; }
-.tier-hd {
-  font-family:'Boogaloo',cursive; font-size:1rem;
-  padding:5px 12px; border-radius:7px; color:white;
-  margin-bottom:8px; display:inline-block;
-}
-.bonus-grid-4 {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:7px;
-}
-.bcard {
-  border:1.5px solid #FFE0B2; border-radius:9px;
-  padding:8px 10px; display:flex; flex-direction:column; gap:4px;
-}
-.bcard-emoji { font-size:1.1rem; line-height:1; }
-.bcard-name  { font-size:0.72rem; font-weight:800; color:#1A1A2E; line-height:1.25; flex:1; }
-.bcard-foot  { display:flex; align-items:center; gap:5px; padding-top:5px; border-top:1px solid #F0EDE8; }
-.bpill { font-size:0.62rem; font-weight:800; padding:2px 7px; border-radius:8px; background:#FFD93D; flex-shrink:0; }
+/* ── BONUS CHORE MENU ── */
+.bonus-page-title { font-family:'Boogaloo',cursive; font-size:1.8rem; color:#1A1A2E; }
+.bonus-page-sub { font-size:0.72rem; font-weight:700; color:#AAA; margin-top:2px; margin-bottom:14px; padding-bottom:12px; border-bottom:3px solid #FFD93D; }
+.tier-section { margin-bottom:14px; }
+.tier-hd { font-family:'Boogaloo',cursive; font-size:1rem; color:white; padding:5px 12px; border-radius:7px; margin-bottom:8px; display:inline-block; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.bonus-grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.bcard { border:1.5px solid #FFE0B2; border-radius:9px; padding:9px 10px; display:flex; flex-direction:column; gap:4px; }
+.bcard-emoji { font-size:1.15rem; line-height:1; }
+.bcard-name  { font-size:0.73rem; font-weight:800; color:#1A1A2E; line-height:1.28; flex:1; }
+.bcard-foot  { display:flex; align-items:center; gap:5px; padding-top:6px; border-top:1px solid #F0EDE8; }
+.bpill { font-size:0.62rem; font-weight:800; padding:2px 7px; border-radius:8px; background:#FFD93D; flex-shrink:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 .bpill.med  { background:#FFB347; }
 .bpill.hard { background:#FF8C69; color:white; }
 .bcard-line { flex:1; border-bottom:1px solid #DDD; height:12px; }
 .bcard-who  { font-size:0.58rem; font-weight:800; color:#CCC; flex-shrink:0; }
 
-/* ── REWARDS PAGE ── */
-.rewards-page-header {
-  margin-bottom:14px; flex-shrink:0;
-  padding-bottom:12px; border-bottom:4px solid #C77DFF;
-}
+/* ── REWARDS ── */
 .rewards-page-title { font-family:'Boogaloo',cursive; font-size:1.8rem; color:#1A1A2E; }
-.rewards-page-sub { font-size:0.72rem; font-weight:700; color:#AAA; margin-top:2px; }
-
-.reward-cat-section { margin-bottom:12px; }
-.reward-cat-hd {
-  font-family:'Boogaloo',cursive; font-size:0.95rem;
-  color:white; padding:4px 12px; border-radius:6px;
-  margin-bottom:7px; display:inline-block;
-}
-.rewards-grid {
-  display:grid; grid-template-columns:repeat(5,1fr); gap:7px;
-}
-.rcard {
-  border:1.5px solid #EEE; border-radius:9px;
-  padding:9px 10px; display:flex; flex-direction:column; gap:4px;
-}
+.rewards-page-sub { font-size:0.72rem; font-weight:700; color:#AAA; margin-top:2px; margin-bottom:14px; padding-bottom:12px; border-bottom:3px solid #C77DFF; }
+.reward-cat-section { margin-bottom:13px; }
+.reward-cat-hd { font-family:'Boogaloo',cursive; font-size:0.95rem; color:white; padding:4px 12px; border-radius:6px; margin-bottom:7px; display:inline-block; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.rewards-grid-5 { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; }
+.rcard { border:1.5px solid #EEE; border-radius:9px; padding:9px 10px; display:flex; flex-direction:column; gap:4px; }
 .rcard-icon { font-size:1.3rem; line-height:1; }
 .rcard-name { font-size:0.7rem; font-weight:800; color:#1A1A2E; line-height:1.25; flex:1; }
-.rcard-gift { font-size:0.55rem; font-weight:800; background:#E8F5E9; color:#2E7D32; padding:1px 5px; border-radius:6px; display:inline-block; margin-top:1px; }
+.rcard-gift { font-size:0.55rem; font-weight:800; background:#E8F5E9; color:#2E7D32; padding:1px 5px; border-radius:6px; display:inline-block; margin-top:1px; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 .rcard-cost { display:flex; align-items:center; gap:4px; margin-top:auto; padding-top:5px; border-top:1px solid #F0EDE8; }
-.rpill { font-family:'Boogaloo',cursive; font-size:0.88rem; background:#FFD93D; padding:1px 8px; border-radius:8px; color:#1A1A2E; }
+.rpill { font-family:'Boogaloo',cursive; font-size:0.9rem; background:#FFD93D; padding:1px 8px; border-radius:8px; color:#1A1A2E; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 .rcost-label { font-size:0.58rem; font-weight:800; color:#AAA; }
 
-/* category colors */
 .cat-food       { background:#FF6B9D; }
 .cat-screen     { background:#4FC3F7; }
 .cat-home       { background:#6BCB77; }
@@ -159,32 +133,24 @@ body { font-family: 'Nunito', sans-serif; background: #F0F0F0; color: #1A1A2E; }
 .cat-parent     { background:#FF6B6B; }
 
 /* ══════════════════════
-   PRINT
+   PRINT — only the target page shows
    ══════════════════════ */
 @media print {
+  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
   @page { size:letter portrait; margin:0.45in 0.5in; }
 
-  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+  #toolbar, #tip, #status, #loading,
+  .page-toolbar, .page-wrapper:not(.printing) { display:none !important; }
 
-  #toolbar, #tip, #status, .page-label, #loading { display:none !important; }
+  .page-wrapper.printing { display:block !important; width:100%; }
+
+  .page-wrapper.printing .page {
+    width:100%; box-shadow:none; border:none; border-radius:0;
+    padding:0; margin:0;
+  }
 
   body { background:white; }
-
-  #pages { padding:0; gap:0; display:block; }
-
-  .page {
-    width:100%; box-shadow:none;
-    padding:0.35in 0.4in 0.3in;
-    page-break-after:always;
-    page-break-inside:avoid;
-    margin:0;
-    height:9.1in;
-    overflow:hidden;
-  }
-  .page:last-child { page-break-after:avoid; }
-
-  .tier-section, .reward-cat-section { page-break-inside:avoid; }
-  .bcard, .rcard { page-break-inside:avoid; }
+  #pages { padding:0; gap:0; }
 }
 </style>
 </head>
@@ -193,34 +159,31 @@ body { font-family: 'Nunito', sans-serif; background: #F0F0F0; color: #1A1A2E; }
 <div id="toolbar">
   <h1>🖨️ Wolters Chore Charts — Print Preview</h1>
   <a href="index.html" class="tbtn back">← Back to Tracker</a>
-  <button class="tbtn print" onclick="window.print()">🖨️ Print All Pages</button>
 </div>
-<div id="tip">⚠️ <strong>Before printing:</strong> Chrome print dialog → More settings → turn on <strong style="color:#FF9A3C">"Background graphics"</strong> to print colors correctly.</div>
-<div id="status">⏳ Loading chore data from Google Sheet...</div>
+<div id="tip">⚠️ <strong>Before printing:</strong> Chrome print dialog → More settings → enable <strong style="color:#FF9A3C">"Background graphics"</strong> for colors to print correctly.</div>
+<div id="status">⏳ Loading chore data...</div>
 <div id="loading">☀️ Loading...</div>
 <div id="pages"></div>
 
 <script>
 const SHEET_ID = '1nZpOJT3GODd3H9PXkg6nk25DFoQ5So7QrXuE0cWZHRU';
 
-function sheetUrl(tab) {
-  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`;
-}
-async function fetchCSV(tab) {
-  const r = await fetch(sheetUrl(tab),{cache:'no-cache'});
-  if (!r.ok) throw new Error(`Cannot load "${tab}"`);
+function sheetUrl(t){ return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(t)}`; }
+async function fetchCSV(tab){
+  const r=await fetch(sheetUrl(tab),{cache:'no-cache'});
+  if(!r.ok) throw new Error(`Cannot load "${tab}"`);
   return parseCSV(await r.text());
 }
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = csvRow(lines[0]);
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  const headers=csvRow(lines[0]);
   return lines.slice(1).filter(l=>l.trim()).map(line=>{
-    const vals=csvRow(line); const obj={};
+    const vals=csvRow(line),obj={};
     headers.forEach((h,i)=>obj[h.trim()]=(vals[i]||'').trim());
     return obj;
   });
 }
-function csvRow(line) {
+function csvRow(line){
   const cols=[];let cur='',inQ=false;
   for(let i=0;i<line.length;i++){
     const c=line[i];
@@ -235,24 +198,48 @@ function splitEmoji(str){
   return m?{emoji:m[0],name:str.slice(m[0].length).trim()}:{emoji:'⭐',name:str};
 }
 
-const ACCENTS={
-  penelope:{bar:'#FF6B9D'},
-  axel:    {bar:'#4FC3F7'},
-  truett:  {bar:'#6BCB77'},
-};
-
+const ACCENTS={ penelope:{bar:'#FF6B9D'}, axel:{bar:'#4FC3F7'}, truett:{bar:'#6BCB77'} };
 const REWARD_CATS={
-  food:       {label:'🍦 Food & Treat Experiences',   cls:'cat-food'},
-  screen:     {label:'🎬 Screen & Entertainment',      cls:'cat-screen'},
-  home:       {label:'🏕️ At-Home Experiences',        cls:'cat-home'},
-  outings:    {label:'🎡 Outings & Adventures',        cls:'cat-outings'},
-  privileges: {label:'👑 Special Privileges',          cls:'cat-privileges'},
-  parent:     {label:'❤️ Parent Time',                cls:'cat-parent'},
+  food:       {label:'🍦 Food & Treat Experiences',  cls:'cat-food'},
+  screen:     {label:'🎬 Screen & Entertainment',     cls:'cat-screen'},
+  home:       {label:'🏕️ At-Home Experiences',       cls:'cat-home'},
+  outings:    {label:'🎡 Outings & Adventures',       cls:'cat-outings'},
+  privileges: {label:'👑 Special Privileges',         cls:'cat-privileges'},
+  parent:     {label:'❤️ Parent Time',               cls:'cat-parent'},
 };
 
-function setStatus(msg,cls){
-  const el=document.getElementById('status');
-  el.textContent=msg; el.className=cls||'';
+function setStatus(msg,cls){ const el=document.getElementById('status'); el.textContent=msg; el.className=cls||''; }
+
+// Print a single page by id
+function printPage(id){
+  // Mark the target
+  document.querySelectorAll('.page-wrapper').forEach(el=>el.classList.remove('printing'));
+  document.getElementById(id).classList.add('printing');
+  window.print();
+  // Clean up after print dialog closes
+  setTimeout(()=>document.querySelectorAll('.page-wrapper').forEach(el=>el.classList.remove('printing')), 500);
+}
+
+function makePage(id, labelText, innerHTML){
+  const pages = document.getElementById('pages');
+
+  const wrap = document.createElement('div');
+  wrap.className = 'page-wrapper';
+  wrap.id = id;
+
+  const toolbar = document.createElement('div');
+  toolbar.className = 'page-toolbar';
+  toolbar.innerHTML = `
+    <span class="page-toolbar-label">📄 ${labelText}</span>
+    <button class="print-page-btn" onclick="printPage('${id}')">🖨️ Print This Page</button>`;
+
+  const page = document.createElement('div');
+  page.className = 'page';
+  page.innerHTML = innerHTML;
+
+  wrap.appendChild(toolbar);
+  wrap.appendChild(page);
+  pages.appendChild(wrap);
 }
 
 async function load(){
@@ -262,34 +249,15 @@ async function load(){
       fetchCSV('BONUS_CHORES'),fetchCSV('REWARDS'),
     ]);
     document.getElementById('loading').style.display='none';
-    setStatus('✓ Data loaded — click "Print All Pages" to print','ok');
-    render(
-      kids.filter(k=>k.active==='TRUE'),
-      essentials, truettBonus, bonusChores, rewards
-    );
+    setStatus('✓ Data loaded — use the "Print This Page" button on each card','ok');
+    render(kids.filter(k=>k.active==='TRUE'), essentials, truettBonus, bonusChores, rewards);
   }catch(e){
     setStatus('⚠️ Could not load Sheet. '+e.message,'err');
     document.getElementById('loading').textContent='⚠️ Could not load data.';
   }
 }
 
-function makePage(labelText){
-  const wrap=document.createElement('div');
-  if(labelText){
-    const lbl=document.createElement('div');
-    lbl.className='page-label'; lbl.textContent=labelText;
-    wrap.appendChild(lbl);
-  }
-  const page=document.createElement('div');
-  page.className='page';
-  wrap.appendChild(page);
-  document.getElementById('pages').appendChild(wrap);
-  return page;
-}
-
-function render(kids,essentials,truettBonus,bonusChores,rewards){
-  const pages=document.getElementById('pages');
-  pages.innerHTML='';
+function render(kids, essentials, truettBonus, bonusChores, rewards){
 
   // ── KID PAGES ──
   kids.forEach((kid,idx)=>{
@@ -322,8 +290,7 @@ function render(kids,essentials,truettBonus,bonusChores,rewards){
         <span class="rl-pts">pts:</span><div class="rl-box"></div>
       </div>`).join(''):'';
 
-    const page=makePage(`Page ${idx+1} — ${kid.name}`);
-    page.innerHTML=`
+    const html=`
       <div class="page-header" style="border-bottom-color:${accent.bar}">
         <div class="hdr-emoji">${kid.emoji}</div>
         <div class="hdr-text">
@@ -332,7 +299,6 @@ function render(kids,essentials,truettBonus,bonusChores,rewards){
         </div>
         <div class="week-box"><div class="wl">Week of</div><span class="ws"></span></div>
       </div>
-
       <div class="sec-bar" style="background:${accent.bar}">📋 Daily Essentials — Check off each day you complete it!</div>
       <table class="chore-table">
         <thead><tr>
@@ -341,9 +307,7 @@ function render(kids,essentials,truettBonus,bonusChores,rewards){
         </tr></thead>
         <tbody>${essRows}</tbody>
       </table>
-
       <hr class="divider">
-
       ${isTruett?`
         <div class="sec-bar" style="background:#3AB44A">🐢 Truett's Bonus Jobs — Check the box each time you do it!</div>
         <table class="chore-table">
@@ -356,31 +320,26 @@ function render(kids,essentials,truettBonus,bonusChores,rewards){
           <div class="ruled-area">${ruled}</div>
         </div>
       `}
-
       <div class="pts-footer">
         <span class="pf-label">⭐ Week Total:</span>
         <div class="pf-total"><div class="ptl">Points Earned</div><span class="ptv"></span></div>
         <div class="pf-note">Add up your points and write the total. Hand to Mom or Dad to update your balance!</div>
       </div>
       <div class="page-foot">WOLTERS SUMMER VACATION POINTS 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div>`;
+
+    makePage(`page-${id}`, `${kid.emoji} ${kid.name}'s Chore Chart`, html);
   });
 
-  // ── BONUS CHORE MENU PAGE ──
+  // ── BONUS CHORE MENU ──
   const tiers=[
     {key:'easy',  label:'🟡 Quick & Easy',  range:'1–2 pts', bg:'#F59E0B', cls:''},
     {key:'medium',label:'🟠 Medium Effort', range:'3–4 pts', bg:'#F97316', cls:'med'},
     {key:'hard',  label:'🔴 Big Jobs',       range:'5+ pts',  bg:'#EF4444', cls:'hard'},
   ];
 
-  const bPage=makePage(`Page ${kids.length+1} — Bonus Chore Menu`);
-
   let bHTML=`
-    <div class="bonus-page-header" style="border-bottom:4px solid #FFD93D; padding-bottom:12px;">
-      <div>
-        <div class="bonus-page-title">⭐ Bonus Chore Menu — Summer 2026</div>
-        <div class="bonus-page-sub">Harder jobs = more points. Write the kid's name on the line when complete.</div>
-      </div>
-    </div>`;
+    <div class="bonus-page-title">⭐ Bonus Chore Menu — Summer 2026</div>
+    <div class="bonus-page-sub">Harder jobs = more points. Write the kid's name on the line when complete.</div>`;
 
   tiers.forEach(tier=>{
     const chores=bonusChores.filter(c=>c.tier===tier.key);
@@ -402,18 +361,14 @@ function render(kids,essentials,truettBonus,bonusChores,rewards){
       <div class="bonus-grid-4">${cards}</div>
     </div>`;
   });
+  bHTML+=`<div class="page-foot" style="margin-top:14px">WOLTERS SUMMER VACATION POINTS 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div>`;
 
-  bHTML+=`<div class="page-foot" style="margin-top:10px">WOLTERS SUMMER VACATION POINTS 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div>`;
-  bPage.innerHTML=bHTML;
+  makePage('page-bonus', '⭐ Bonus Chore Menu', bHTML);
 
   // ── REWARDS PAGE ──
-  const rPage=makePage(`Page ${kids.length+2} — Rewards Store`);
-
   let rHTML=`
-    <div class="rewards-page-header">
-      <div class="rewards-page-title">🎁 Rewards Store — Summer 2026</div>
-      <div class="rewards-page-sub">Spend your vacation points on something awesome. 🤝 = can be gifted to a sibling.</div>
-    </div>`;
+    <div class="rewards-page-title">🎁 Rewards Store — Summer 2026</div>
+    <div class="rewards-page-sub">Spend your vacation points on something awesome. 🤝 = can be gifted to a sibling.</div>`;
 
   Object.entries(REWARD_CATS).forEach(([cat,cfg])=>{
     const catRewards=rewards.filter(r=>r.category===cat);
@@ -432,15 +387,15 @@ function render(kids,essentials,truettBonus,bonusChores,rewards){
     }).join('');
     rHTML+=`<div class="reward-cat-section">
       <div class="reward-cat-hd ${cfg.cls}">${cfg.label}</div>
-      <div class="rewards-grid">${cards}</div>
+      <div class="rewards-grid-5">${cards}</div>
     </div>`;
   });
+  rHTML+=`<div class="page-foot" style="margin-top:14px">WOLTERS SUMMER VACATION POINTS 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div>`;
 
-  rHTML+=`<div class="page-foot" style="margin-top:10px">WOLTERS SUMMER VACATION POINTS 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div>`;
-  rPage.innerHTML=rHTML;
+  makePage('page-rewards', '🎁 Rewards Store', rHTML);
 }
 
-window.addEventListener('DOMContentLoaded',load);
+window.addEventListener('DOMContentLoaded', load);
 </script>
 </body>
 </html>
