@@ -378,6 +378,120 @@ main {
   border-bottom: 2px dashed #EEE;
 }
 
+/* ── TRANSACTION LOG ── */
+.log-filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: 'Boogaloo', cursive;
+  font-size: 0.95rem;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 2px solid #EEE;
+  background: white;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn.active { border-color: var(--orange); color: var(--dark); background: #FFF8F0; }
+.filter-btn.penelope.active { border-color: #FF6B9D; background: #FFF0F6; color: #FF6B9D; }
+.filter-btn.axel.active     { border-color: #4FC3F7; background: #F0FAFF; color: #4FC3F7; }
+.filter-btn.truett.active   { border-color: #6BCB77; background: #F0FFF4; color: #6BCB77; }
+
+.log-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+  border: 1.5px solid #F0EDE8;
+  background: white;
+  transition: background 0.15s;
+}
+.log-entry:hover { background: #FFFDF7; }
+.log-kid-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.log-emoji { font-size: 1.1rem; flex-shrink: 0; }
+.log-desc  { flex: 1; font-weight: 700; font-size: 0.88rem; }
+.log-date  { font-size: 0.75rem; color: #AAA; font-weight: 700; white-space: nowrap; }
+.log-pts   { font-family: 'Boogaloo', cursive; font-size: 1.1rem; min-width: 52px; text-align: right; }
+.log-pts.positive { color: #2E7D32; }
+.log-pts.negative { color: #C62828; }
+
+.empty-log {
+  text-align: center;
+  padding: 40px 20px;
+  color: #CCC;
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.2rem;
+}
+
+/* ── DISCRETIONARY AWARD ── */
+.award-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.award-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.award-input {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 2px solid #EEE;
+  border-radius: 12px;
+  padding: 8px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: white;
+}
+.award-input:focus { border-color: var(--orange); }
+.award-input.desc  { flex: 1; min-width: 180px; }
+.award-input.pts   { width: 80px; text-align: center; }
+.kid-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 7px 14px;
+  border-radius: 12px;
+  border: 2px solid #EEE;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.kid-toggle.selected.penelope { border-color: #FF6B9D; background: #FFF0F6; color: #FF6B9D; }
+.kid-toggle.selected.axel     { border-color: #4FC3F7; background: #F0FAFF; color: #4FC3F7; }
+.kid-toggle.selected.truett   { border-color: #6BCB77; background: #F0FFF4; color: #6BCB77; }
+.award-btn {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.05rem;
+  background: linear-gradient(135deg, #FF9A3C, #FFD93D);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 24px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(255,154,60,0.3);
+  transition: all 0.2s;
+  width: 100%;
+}
+.award-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(255,154,60,0.4); }
+.award-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
 /* ── RESET BTN ── */
 .reset-btn {
   background: none;
@@ -404,68 +518,164 @@ main {
 }
 
 /* ══════════════════════════════════════════════════
-   PRINT STYLES
-   Each kid tab prints as one clean letter-size page
+   PRINT STYLES — Weekly grid layout per kid
    ══════════════════════════════════════════════════ */
+
+/* Screen: hide print-only elements */
+.print-only { display: none !important; }
+.print-kid-title { display: none; }
+
 @media print {
-  @page { size: letter portrait; margin: 0.6in; }
+  @page { size: letter portrait; margin: 0.55in 0.6in; }
 
-  body { background: white !important; font-size: 11pt; }
-  header, nav, #status-bar, .reset-btn, .who-select, .score-bar-wrap { display: none !important; }
+  body { background: white !important; }
+  header, nav, #status-bar, .reset-btn, .who-select,
+  .score-bar-wrap, .progress-wrap, .unlock-banner,
+  .note, #panel-award, #panel-log,
+  #panel-scoreboard, #panel-bonus,
+  .screen-only { display: none !important; }
 
-  /* Show ALL panels when printing */
+  /* Show print-only elements */
+  .print-only { display: block !important; }
+
+  /* Show all kid panels + rewards */
   .panel { display: block !important; page-break-after: always; }
-  .panel:last-child { page-break-after: avoid; }
-
-  /* Hide scoreboard & bonus in print — kid charts + rewards only */
-  #panel-scoreboard, #panel-bonus { display: none !important; }
+  #panel-rewards { page-break-after: avoid; }
 
   main { padding: 0; max-width: 100%; }
 
-  .kid-header {
-    background: none !important;
-    color: var(--dark) !important;
-    border: 3px solid #DDD;
-    border-radius: 12px;
-    padding: 12px 16px;
-    box-shadow: none;
+  /* ── PRINT KID HEADER ── */
+  .print-kid-title { display: block !important; }
+  .print-header-block {
+    display: flex !important;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    border-bottom: 4px solid #DDD;
+    padding-bottom: 14px;
   }
-  .kid-avatar { background: #EEE !important; font-size: 1.6rem; width: 48px; height: 48px; }
-  .kid-pts-box { background: #EEE !important; border-color: #CCC; }
-  .kid-pts-num, .kid-pts-label { color: var(--dark) !important; }
+  .print-header-emoji {
+    font-size: 2.8rem;
+    line-height: 1;
+  }
+  .print-header-text h2 {
+    font-family: 'Boogaloo', cursive;
+    font-size: 26pt;
+    color: var(--dark);
+    line-height: 1;
+  }
+  .print-header-text p {
+    font-size: 9pt;
+    font-weight: 700;
+    color: #888;
+    margin-top: 2px;
+  }
+  .print-week-box {
+    margin-left: auto;
+    border: 2px solid #DDD;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 9pt;
+    font-weight: 800;
+    color: #888;
+    text-align: center;
+    min-width: 120px;
+  }
+  .print-week-box span {
+    display: block;
+    font-size: 14pt;
+    font-family: 'Boogaloo', cursive;
+    color: var(--dark);
+    margin-top: 2px;
+    min-height: 22px;
+    border-bottom: 1.5px solid #CCC;
+  }
 
-  .card { box-shadow: none; border: 1.5px solid #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+  /* ── WEEKLY CHORE GRID ── */
+  .print-chore-section { margin-bottom: 20px; }
+  .print-chore-title {
+    font-family: 'Boogaloo', cursive;
+    font-size: 13pt;
+    margin-bottom: 8px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    color: white;
+  }
 
-  .chore-row { padding: 8px 10px; }
-  .check-box { width: 22px; height: 22px; border: 2px solid #999; background: white; }
-  .check-box.ticked { background: white !important; color: transparent !important; }
-  /* Print blank checkboxes so kids can fill by hand */
-  .check-box::after { content: ''; }
+  .print-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Nunito', sans-serif;
+  }
+  .print-grid-table th {
+    font-size: 9pt;
+    font-weight: 800;
+    text-align: center;
+    padding: 6px 4px;
+    border: 1.5px solid #DDD;
+    width: 36px;
+  }
+  .print-grid-table th.chore-col {
+    text-align: left;
+    padding-left: 10px;
+    width: auto;
+  }
+  .print-grid-table td {
+    border: 1.5px solid #DDD;
+    height: 32px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .print-grid-table td.chore-name {
+    text-align: left;
+    padding: 6px 10px;
+    font-size: 9.5pt;
+    font-weight: 700;
+  }
+  .print-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #BBB;
+    border-radius: 4px;
+    display: inline-block;
+    margin: auto;
+  }
+  /* Alternating row tint */
+  .print-grid-table tr:nth-child(even) td { background: #FAFAFA; }
 
-  .bonus-card { border: 1.5px solid #CCC; background: white; }
-  .bonus-check { border: 2px solid #999; background: white; }
-  .bonus-check::after { content: ''; }
+  /* ── POINTS TRACKER FOOTER ── */
+  .print-points-footer {
+    margin-top: 16px;
+    display: flex !important;
+    gap: 12px;
+    align-items: center;
+    border-top: 2px dashed #DDD;
+    padding-top: 12px;
+  }
+  .print-points-label {
+    font-family: 'Boogaloo', cursive;
+    font-size: 12pt;
+    color: #888;
+  }
+  .print-points-boxes {
+    display: flex;
+    gap: 8px;
+  }
+  .print-point-box {
+    width: 36px; height: 36px;
+    border: 2px solid #CCC;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8pt;
+    color: #BBB;
+    font-weight: 800;
+  }
 
+  /* ── REWARDS (print compact) ── */
   .reward-card { border: 1.5px solid #CCC; page-break-inside: avoid; }
   .reward-grid { grid-template-columns: repeat(3, 1fr); }
-  .bonus-grid  { grid-template-columns: repeat(2, 1fr); }
-
-  .unlock-banner, .note { border: 1.5px solid #CCC; background: #F9F9F9 !important; }
-
-  /* Print header per page */
-  .print-kid-title {
-    font-family: 'Boogaloo', cursive;
-    font-size: 20pt;
-    text-align: center;
-    margin-bottom: 12px;
-    border-bottom: 3px solid #DDD;
-    padding-bottom: 8px;
-  }
+  .card { box-shadow: none; border: 1.5px solid #CCC; margin-bottom: 10px; }
 }
-
-/* Hide print title on screen */
-.print-kid-title { display: none; }
-@media print { .print-kid-title { display: block; } }
 
 </style>
 </head>
@@ -487,6 +697,8 @@ main {
   <button onclick="showTab('truett')">🐢 Truett</button>
   <button onclick="showTab('bonus')">⭐ Bonus Chores</button>
   <button onclick="showTab('rewards')">🎁 Rewards</button>
+  <button onclick="showTab('award')">✨ Award Points</button>
+  <button onclick="showTab('log')">📒 Log</button>
 </nav>
 
 <!-- ── MAIN ── -->
@@ -509,13 +721,19 @@ main {
   <!-- REWARDS -->
   <div class="panel" id="panel-rewards"></div>
 
+  <!-- AWARD POINTS -->
+  <div class="panel" id="panel-award"></div>
+
+  <!-- TRANSACTION LOG -->
+  <div class="panel" id="panel-log"></div>
+
 </main>
 
 <script>
 // ══════════════════════════════════════════════════════
 // CONFIG — swap in your Sheet ID below
 // ══════════════════════════════════════════════════════
-const SHEET_ID = '1nZpOJT3GODd3H9PXkg6nk25DFoQ5So7QrXuE0cWZHRU';
+const SHEET_ID = 'PASTE_YOUR_SHEET_ID_HERE';
 
 // ══════════════════════════════════════════════════════
 // STATE
@@ -524,6 +742,18 @@ let DB = { kids:[], essentials:[], truettBonus:[], bonusChores:[], rewards:[], p
 // Daily check state lives in sessionStorage (resets each browser session / new day)
 let essentialsDone = JSON.parse(sessionStorage.getItem('essentialsDone') || '{}');
 let bonusClaimed   = JSON.parse(sessionStorage.getItem('bonusClaimed')   || '{}');
+// Transaction log — persists in localStorage all summer
+let txLog = JSON.parse(localStorage.getItem('wolters-tx-log') || '[]');
+
+const KID_COLORS = { penelope:'#FF6B9D', axel:'#4FC3F7', truett:'#6BCB77' };
+
+function logTx(kidId, emoji, desc, pts) {
+  const today = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  txLog.unshift({ kidId, emoji, desc, pts, date: today, ts: Date.now() });
+  if (txLog.length > 200) txLog = txLog.slice(0, 200);
+  localStorage.setItem('wolters-tx-log', JSON.stringify(txLog));
+  renderLog();
+}
 
 // ══════════════════════════════════════════════════════
 // SHEET FETCH  (public CSV export)
@@ -700,6 +930,8 @@ function renderAll() {
   DB.kids.forEach(kid => renderKid(kid));
   renderBonus();
   renderRewards();
+  renderAward();
+  renderLog();
   showTab('scoreboard');
 }
 
@@ -806,32 +1038,80 @@ function renderKid(kid) {
   }
 
   el.innerHTML = `
-    <div class="print-kid-title">${kid.emoji} ${kid.name}'s Chore Chart — Summer 2026</div>
-    <div class="kid-header" style="background:${kidGrads[id]}">
-      <div class="kid-avatar">${kid.emoji}</div>
-      <div>
-        <div class="kid-name">${kid.name}</div>
-        <div class="kid-age">Age ${kid.age}</div>
+    <!-- PRINT HEADER (hidden on screen) -->
+    <div class="print-only print-header-block">
+      <div class="print-header-emoji">${kid.emoji}</div>
+      <div class="print-header-text">
+        <h2>${kid.name}'s Chore Chart</h2>
+        <p>Summer 2026 · Essentials — complete every day!</p>
       </div>
-      <div class="kid-pts-box">
-        <span class="kid-pts-num" id="pts-display-${id}">${pts}</span>
-        <span class="kid-pts-label">⭐ Points</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="section-title">📋 Daily Essentials <span class="tag tag-required">Required — No Points</span></div>
-      <div class="note">Complete ALL of these before bonus chores unlock.</div>
-      ${essentialRows}
-      <div class="progress-wrap">
-        <div class="progress-labels"><span>Daily Progress</span><span id="prog-text-${id}">${doneCount} / ${total}</span></div>
-        <div class="progress-bg"><div class="progress-fill" id="prog-bar-${id}" style="background:${kidFills[id]};width:${pct}%"></div></div>
-      </div>
-      <div class="unlock-banner ${unlocked?'unlocked':'locked'}" id="unlock-banner-${id}">
-        ${unlocked ? '🎉 Essentials complete! Bonus chores are unlocked!' : `🔒 ${total-doneCount} more to unlock bonus chores!`}
+      <div class="print-week-box">
+        WEEK OF<span>&nbsp;</span>
       </div>
     </div>
-    ${truettSection}
-    <button class="reset-btn" onclick="resetEssentials('${id}',${total})">↺ Reset Today's Essentials</button>`;
+
+    <!-- PRINT WEEKLY GRID (hidden on screen) -->
+    <div class="print-only print-chore-section">
+      <div class="print-chore-title" style="background:${kid.accent_color||'#FF9A3C'}">
+        📋 Daily Essentials — Check off each day you complete it!
+      </div>
+      <table class="print-grid-table">
+        <thead>
+          <tr>
+            <th class="chore-col">Chore</th>
+            <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${essentials.map(e => `
+            <tr>
+              <td class="chore-name">${e.chore_label}</td>
+              <td><div class="print-checkbox"></div></td>
+              <td><div class="print-checkbox"></div></td>
+              <td><div class="print-checkbox"></div></td>
+              <td><div class="print-checkbox"></div></td>
+              <td><div class="print-checkbox"></div></td>
+              <td><div class="print-checkbox"></div></td>
+              <td><div class="print-checkbox"></div></td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+      <div class="print-points-footer">
+        <span class="print-points-label">⭐ Bonus Points Earned:</span>
+        <div class="print-points-boxes">
+          ${Array(8).fill('<div class="print-point-box">pts</div>').join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- SCREEN VIEW (hidden on print via .screen-only) -->
+    <div class="screen-only">
+      <div class="kid-header" style="background:${kidGrads[id]}">
+        <div class="kid-avatar">${kid.emoji}</div>
+        <div>
+          <div class="kid-name">${kid.name}</div>
+          <div class="kid-age">Age ${kid.age}</div>
+        </div>
+        <div class="kid-pts-box">
+          <span class="kid-pts-num" id="pts-display-${id}">${pts}</span>
+          <span class="kid-pts-label">⭐ Points</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">📋 Daily Essentials <span class="tag tag-required">Required — No Points</span></div>
+        <div class="note">Complete ALL of these before bonus chores unlock.</div>
+        ${essentialRows}
+        <div class="progress-wrap">
+          <div class="progress-labels"><span>Daily Progress</span><span id="prog-text-${id}">${doneCount} / ${total}</span></div>
+          <div class="progress-bg"><div class="progress-fill" id="prog-bar-${id}" style="background:${kidFills[id]};width:${pct}%"></div></div>
+        </div>
+        <div class="unlock-banner ${unlocked?'unlocked':'locked'}" id="unlock-banner-${id}">
+          ${unlocked ? '🎉 Essentials complete! Bonus chores are unlocked!' : `🔒 ${total-doneCount} more to unlock bonus chores!`}
+        </div>
+      </div>
+      ${truettSection}
+      <button class="reset-btn" onclick="resetEssentials('${id}',${total})">↺ Reset Today's Essentials</button>
+    </div>`;
 }
 
 // ── BONUS ──
@@ -977,6 +1257,9 @@ function claimBonus(choreId, selectEl, pts) {
       DB.points[val] = (DB.points[val]||0) + pts;
     }
     bonusClaimed[choreId] = val;
+    const claimedKid = DB.kids.find(k=>k.kid_id===val);
+    const chore = DB.bonusChores.find(c=>c.chore_id===choreId);
+    if (chore) logTx(val, claimedKid?.emoji||'⭐', chore.chore_label, pts);
   }
 
   sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
@@ -1006,13 +1289,166 @@ function resetBonus() {
   DB.kids.forEach(k => renderKid(k));
 }
 
+// ── AWARD POINTS ──
+function renderAward() {
+  const el = document.getElementById('panel-award');
+  const kidToggles = DB.kids.map(k => `
+    <div class="kid-toggle ${k.kid_id}" id="toggle-${k.kid_id}" onclick="toggleKidSelect('${k.kid_id}')">
+      ${k.emoji} ${k.name}
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="section-title">✨ Award Discretionary Points</div>
+      <div class="note">Use this to award points for anything not on the chore list — kindness, great attitude, helping without being asked, etc.</div>
+      <div class="award-form">
+        <div>
+          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Who gets the points?</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+            ${kidToggles}
+            <div class="kid-toggle" id="toggle-all" onclick="toggleKidSelect('all')" style="border-color:#FFD93D">
+              ⭐ All Three
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">What did they do?</div>
+          <input class="award-input desc" id="award-desc" type="text" placeholder='e.g. "Being kind to siblings"' />
+        </div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">How many points?</div>
+          <div class="award-row">
+            <input class="award-input pts" id="award-pts" type="number" min="1" max="50" value="5" />
+            <span style="font-weight:800;color:#888">pts</span>
+            <div style="display:flex;gap:6px;margin-left:4px">
+              ${[1,2,3,5,10].map(n=>`<button onclick="document.getElementById('award-pts').value=${n}" style="font-family:'Boogaloo',cursive;font-size:0.9rem;padding:5px 10px;border-radius:8px;border:2px solid #EEE;background:white;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='#FFD93D'" onmouseout="this.style.borderColor='#EEE'">${n}</button>`).join('')}
+            </div>
+          </div>
+        </div>
+        <button class="award-btn" onclick="submitAward()">✨ Award Points</button>
+        <div id="award-confirm" style="text-align:center;font-weight:800;color:#2E7D32;font-size:0.9rem;min-height:20px"></div>
+      </div>
+    </div>`;
+}
+
+let selectedKids = new Set();
+
+function toggleKidSelect(kidId) {
+  if (kidId === 'all') {
+    const allBtn = document.getElementById('toggle-all');
+    if (selectedKids.size === DB.kids.length) {
+      selectedKids.clear();
+      allBtn.style.background = 'white';
+      allBtn.style.borderColor = '#FFD93D';
+      allBtn.style.color = 'inherit';
+    } else {
+      DB.kids.forEach(k => selectedKids.add(k.kid_id));
+      allBtn.style.background = '#FFFDE7';
+      allBtn.style.borderColor = '#FFD93D';
+      allBtn.style.color = '#B8860B';
+      DB.kids.forEach(k => {
+        const el = document.getElementById('toggle-' + k.kid_id);
+        if (el) el.classList.add('selected');
+      });
+    }
+    return;
+  }
+  const btn = document.getElementById('toggle-' + kidId);
+  if (selectedKids.has(kidId)) {
+    selectedKids.delete(kidId);
+    btn?.classList.remove('selected');
+  } else {
+    selectedKids.add(kidId);
+    btn?.classList.add('selected');
+  }
+}
+
+function submitAward() {
+  const desc = document.getElementById('award-desc')?.value.trim();
+  const pts  = parseInt(document.getElementById('award-pts')?.value) || 0;
+  if (!desc) { alert('Add a description first.'); return; }
+  if (!pts || pts < 1) { alert('Enter a point value.'); return; }
+  if (selectedKids.size === 0) { alert('Select at least one kid.'); return; }
+
+  selectedKids.forEach(kidId => {
+    DB.points[kidId] = (DB.points[kidId]||0) + pts;
+    const kid = DB.kids.find(k=>k.kid_id===kidId);
+    logTx(kidId, kid?.emoji||'⭐', '✨ ' + desc, pts);
+  });
+
+  // Reset form
+  document.getElementById('award-desc').value = '';
+  document.getElementById('award-pts').value = '5';
+  selectedKids.clear();
+  DB.kids.forEach(k => document.getElementById('toggle-'+k.kid_id)?.classList.remove('selected'));
+  const allBtn = document.getElementById('toggle-all');
+  if (allBtn) { allBtn.style.background='white'; allBtn.style.borderColor='#FFD93D'; allBtn.style.color='inherit'; }
+
+  const confirm = document.getElementById('award-confirm');
+  if (confirm) { confirm.textContent = '✓ Points awarded!'; setTimeout(()=>confirm.textContent='', 2500); }
+
+  renderScoreboard();
+  DB.kids.forEach(k => renderKid(k));
+}
+
+// ── TRANSACTION LOG ──
+let activeFilter = 'all';
+
+function renderLog() {
+  const el = document.getElementById('panel-log');
+  if (!el) return;
+
+  const filtered = activeFilter === 'all' ? txLog : txLog.filter(t => t.kidId === activeFilter);
+
+  const filterBtns = [
+    { id:'all', label:'👨‍👩‍👧‍👦 All Kids', cls:'' },
+    ...DB.kids.map(k => ({ id:k.kid_id, label:`${k.emoji} ${k.name}`, cls:k.kid_id }))
+  ].map(f => `<button class="filter-btn ${f.cls}${activeFilter===f.id?' active':''}" onclick="setLogFilter('${f.id}')">${f.label}</button>`).join('');
+
+  const entries = filtered.length ? filtered.map(t => {
+    const color = KID_COLORS[t.kidId] || '#AAA';
+    const sign = t.pts > 0 ? '+' : '';
+    const ptsCls = t.pts > 0 ? 'positive' : 'negative';
+    return `<div class="log-entry">
+      <div class="log-kid-dot" style="background:${color}"></div>
+      <div class="log-emoji">${t.emoji}</div>
+      <div class="log-desc">${t.desc}</div>
+      <div class="log-date">${t.date}</div>
+      <div class="log-pts ${ptsCls}">${sign}${t.pts}</div>
+    </div>`;
+  }).join('') : `<div class="empty-log">No entries yet — start earning! ☀️</div>`;
+
+  const total = filtered.reduce((s,t)=>s+t.pts, 0);
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="section-title">📒 Transaction Log</div>
+      <div class="log-filter-bar">${filterBtns}</div>
+      ${filtered.length ? `<div style="font-size:0.78rem;font-weight:800;color:#AAA;text-align:right;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">${filtered.length} entries · +${total} pts total</div>` : ''}
+      ${entries}
+    </div>
+    <button class="reset-btn" onclick="clearLog()">🗑 Clear Log</button>`;
+}
+
+function setLogFilter(kidId) {
+  activeFilter = kidId;
+  renderLog();
+}
+
+function clearLog() {
+  if (!confirm('Clear the entire transaction log? This cannot be undone.')) return;
+  txLog = [];
+  localStorage.setItem('wolters-tx-log', JSON.stringify(txLog));
+  renderLog();
+}
+
 // ── TAB SWITCHER ──
 function showTab(name) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
   const btns = document.querySelectorAll('nav button');
-  const map = ['scoreboard','penelope','axel','truett','bonus','rewards'];
+  const map = ['scoreboard','penelope','axel','truett','bonus','rewards','award','log'];
   btns[map.indexOf(name)]?.classList.add('active');
 }
 
