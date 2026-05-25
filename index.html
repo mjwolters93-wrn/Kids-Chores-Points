@@ -524,163 +524,169 @@ main {
 }
 
 /* ══════════════════════════════════════════════════
-   PRINT STYLES — Weekly grid layout per kid
+   PRINT STYLES — Full page, weekly grid + ruled bonus
    ══════════════════════════════════════════════════ */
 
-/* Screen: hide print-only elements */
 .print-only { display: none !important; }
-.print-kid-title { display: none; }
 
 @media print {
-  @page { size: letter portrait; margin: 0.55in 0.6in; }
+  @page { size: letter portrait; margin: 0.52in 0.58in; }
 
   body { background: white !important; }
-  header, nav, #status-bar, .reset-btn, .who-select,
-  .score-bar-wrap, .progress-wrap, .unlock-banner,
-  .note, #panel-award, #panel-log,
-  #panel-scoreboard, #panel-bonus,
+
+  /* Hide everything except kid panels + bonus + rewards */
+  header, nav, #status-bar, .reset-btn,
+  #panel-scoreboard, #panel-award, #panel-log,
   .screen-only { display: none !important; }
 
-  /* Show print-only elements */
+  /* Show print-only blocks */
   .print-only { display: block !important; }
 
-  /* Show all kid panels + rewards */
+  /* Every panel prints, page break between each */
   .panel { display: block !important; page-break-after: always; }
   #panel-rewards { page-break-after: avoid; }
 
   main { padding: 0; max-width: 100%; }
 
-  /* ── PRINT KID HEADER ── */
-  .print-kid-title { display: block !important; }
-  .print-header-block {
+  /* ── KID PAGE: full flex column filling the page ── */
+  .print-kid-page {
+    display: flex !important;
+    flex-direction: column;
+    height: 9.96in; /* letter minus margins */
+  }
+
+  /* ── PAGE HEADER ── */
+  .print-page-header {
     display: flex !important;
     align-items: center;
     gap: 16px;
-    margin-bottom: 18px;
+    padding-bottom: 13px;
     border-bottom: 4px solid #DDD;
-    padding-bottom: 14px;
+    margin-bottom: 16px;
+    flex-shrink: 0;
   }
-  .print-header-emoji {
-    font-size: 2.8rem;
-    line-height: 1;
-  }
-  .print-header-text h2 {
+  .print-hdr-emoji { font-size: 2.8rem; line-height: 1; }
+  .print-hdr-text h2 {
     font-family: 'Boogaloo', cursive;
-    font-size: 26pt;
-    color: var(--dark);
+    font-size: 24pt;
+    color: #1A1A2E;
     line-height: 1;
   }
-  .print-header-text p {
-    font-size: 9pt;
-    font-weight: 700;
-    color: #888;
-    margin-top: 2px;
-  }
+  .print-hdr-text p { font-size: 8.5pt; font-weight: 700; color: #AAA; margin-top: 3px; }
   .print-week-box {
-    margin-left: auto;
-    border: 2px solid #DDD;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 9pt;
-    font-weight: 800;
-    color: #888;
-    text-align: center;
-    min-width: 120px;
+    margin-left: auto; flex-shrink: 0;
+    border: 2px solid #DDD; border-radius: 8px;
+    padding: 7px 16px; text-align: center; min-width: 130px;
   }
-  .print-week-box span {
-    display: block;
-    font-size: 14pt;
-    font-family: 'Boogaloo', cursive;
-    color: var(--dark);
-    margin-top: 2px;
-    min-height: 22px;
-    border-bottom: 1.5px solid #CCC;
-  }
+  .print-week-box .pwl { font-size: 7pt; font-weight: 800; color: #AAA; text-transform: uppercase; letter-spacing: 1px; }
+  .print-week-box .pws { display: block; font-family: 'Boogaloo', cursive; font-size: 13pt; color: #1A1A2E; margin-top: 3px; border-bottom: 1.5px solid #CCC; min-height: 22px; }
 
-  /* ── WEEKLY CHORE GRID ── */
-  .print-chore-section { margin-bottom: 20px; }
-  .print-chore-title {
+  /* ── SECTION BAR ── */
+  .print-sec-bar {
     font-family: 'Boogaloo', cursive;
-    font-size: 13pt;
-    margin-bottom: 8px;
-    padding: 5px 10px;
-    border-radius: 6px;
+    font-size: 11pt;
     color: white;
+    padding: 6px 13px;
+    border-radius: 7px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
   }
 
-  .print-grid-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Nunito', sans-serif;
-  }
+  /* ── ESSENTIALS GRID TABLE ── */
+  .print-grid-table { width: 100%; border-collapse: collapse; flex-shrink: 0; }
   .print-grid-table th {
-    font-size: 9pt;
-    font-weight: 800;
-    text-align: center;
-    padding: 6px 4px;
-    border: 1.5px solid #DDD;
-    width: 36px;
+    font-size: 8pt; font-weight: 800; text-align: center;
+    padding: 6px 2px; border: 1.5px solid #DDD; width: 38px; color: #444;
   }
-  .print-grid-table th.chore-col {
-    text-align: left;
-    padding-left: 10px;
-    width: auto;
-  }
-  .print-grid-table td {
-    border: 1.5px solid #DDD;
-    height: 32px;
-    text-align: center;
-    vertical-align: middle;
-  }
-  .print-grid-table td.chore-name {
-    text-align: left;
-    padding: 6px 10px;
-    font-size: 9.5pt;
-    font-weight: 700;
-  }
-  .print-checkbox {
-    width: 18px;
-    height: 18px;
-    border: 2px solid #BBB;
-    border-radius: 4px;
-    display: inline-block;
-    margin: auto;
-  }
-  /* Alternating row tint */
+  .print-grid-table th.nc { text-align: left; padding-left: 10px; width: auto; }
+  .print-grid-table td { border: 1.5px solid #DDD; height: 33px; text-align: center; vertical-align: middle; }
+  .print-grid-table td.nc { text-align: left; padding: 5px 10px; font-size: 9pt; font-weight: 700; color: #1A1A2E; }
   .print-grid-table tr:nth-child(even) td { background: #FAFAFA; }
+  .print-grid-table td.pts-col { font-size: 7.5pt; font-weight: 800; color: #AAA; width: 52px; }
+  .print-cb { width: 17px; height: 17px; border: 2px solid #BBB; border-radius: 3px; display: inline-block; }
 
-  /* ── POINTS TRACKER FOOTER ── */
-  .print-points-footer {
-    margin-top: 16px;
-    display: flex !important;
-    gap: 12px;
-    align-items: center;
-    border-top: 2px dashed #DDD;
-    padding-top: 12px;
+  /* ── DIVIDER ── */
+  .print-divider { border: none; border-top: 1.5px dashed #E0E0E0; margin: 13px 0; flex-shrink: 0; }
+
+  /* ── BONUS RULED SECTION ── */
+  .print-bonus-section { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .print-ruled-area { flex: 1; display: flex; flex-direction: column; justify-content: space-around; padding: 2px 0; }
+  .print-ruled-line {
+    display: flex; align-items: flex-end; gap: 10px;
+    padding-bottom: 4px; border-bottom: 1.5px solid #E4E4E4;
   }
-  .print-points-label {
-    font-family: 'Boogaloo', cursive;
-    font-size: 12pt;
-    color: #888;
-  }
-  .print-points-boxes {
-    display: flex;
+  .prl-num  { font-size: 7.5pt; font-weight: 800; color: #CCC; width: 14px; flex-shrink: 0; padding-bottom: 2px; }
+  .prl-line { flex: 1; }
+  .prl-pts  { font-size: 7pt; font-weight: 800; color: #BBB; flex-shrink: 0; padding-bottom: 2px; white-space: nowrap; }
+  .prl-box  { width: 38px; height: 20px; border: 1.5px solid #CCC; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── BONUS CHORES PRINT (full grid) ── */
+  .print-bonus-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
+    margin-bottom: 16px;
   }
-  .print-point-box {
-    width: 36px; height: 36px;
-    border: 2px solid #CCC;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 8pt;
-    color: #BBB;
-    font-weight: 800;
+  .print-bonus-card {
+    border: 1.5px solid #FFE0B2;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex !important;
+    flex-direction: column;
+    gap: 5px;
+    page-break-inside: avoid;
+  }
+  .pbc-emoji { font-size: 1.3rem; }
+  .pbc-name  { font-size: 8pt; font-weight: 800; color: #1A1A2E; line-height: 1.3; flex: 1; }
+  .pbc-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid #F0EDE8; }
+  .pbc-pts   { font-size: 7.5pt; font-weight: 800; background: #FFD93D; padding: 2px 8px; border-radius: 10px; }
+  .pbc-pts.med  { background: #FFB347; }
+  .pbc-pts.hard { background: #FF8C69; color: white; }
+  .pbc-who   { font-size: 7pt; font-weight: 800; color: #BBB; }
+  .pbc-who-line { flex: 1; border-bottom: 1px solid #DDD; height: 14px; margin-left: 6px; }
+
+  /* ── POINTS FOOTER ── */
+  .print-pts-footer {
+    flex-shrink: 0;
+    border-top: 2px dashed #DDD;
+    padding-top: 11px;
+    margin-top: 8px;
+    display: flex !important;
+    align-items: center;
+    gap: 16px;
+  }
+  .ppf-label { font-family: 'Boogaloo', cursive; font-size: 11pt; color: #888; white-space: nowrap; }
+  .ppf-total { border: 2px solid #DDD; border-radius: 8px; padding: 5px 18px; text-align: center; min-width: 90px; }
+  .ppf-total .ptl { font-size: 6.5pt; font-weight: 800; color: #AAA; text-transform: uppercase; letter-spacing: 1px; }
+  .ppf-total .ptv { display: block; font-family: 'Boogaloo', cursive; font-size: 14pt; color: #1A1A2E; border-bottom: 1.5px solid #CCC; min-height: 24px; }
+  .ppf-note { margin-left: auto; font-size: 7pt; font-weight: 700; color: #CCC; max-width: 200px; text-align: right; line-height: 1.5; }
+
+  /* ── TIER HEADING PRINT ── */
+  .print-tier-heading {
+    font-family: 'Boogaloo', cursive;
+    font-size: 11pt;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1.5px dashed #EEE;
+    page-break-after: avoid;
   }
 
-  /* ── REWARDS (print compact) ── */
+  /* ── PAGE FOOTER NOTE ── */
+  .print-page-footer {
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 6.5pt;
+    font-weight: 800;
+    color: #DDD;
+    letter-spacing: 0.5px;
+    margin-top: 10px;
+  }
+
+  /* ── REWARDS COMPACT ── */
   .reward-card { border: 1.5px solid #CCC; page-break-inside: avoid; }
   .reward-grid { grid-template-columns: repeat(3, 1fr); }
   .card { box-shadow: none; border: 1.5px solid #CCC; margin-bottom: 10px; }
+  .who-select { display: none !important; }
 }
 
 </style>
@@ -1044,53 +1050,80 @@ function renderKid(kid) {
   }
 
   el.innerHTML = `
-    <!-- PRINT HEADER (hidden on screen) -->
-    <div class="print-only print-header-block">
-      <div class="print-header-emoji">${kid.emoji}</div>
-      <div class="print-header-text">
-        <h2>${kid.name}'s Chore Chart</h2>
-        <p>Summer 2026 · Essentials — complete every day!</p>
-      </div>
-      <div class="print-week-box">
-        WEEK OF<span>&nbsp;</span>
-      </div>
-    </div>
+    <!-- ══ PRINT VERSION (hidden on screen) ══ -->
+    <div class="print-only print-kid-page">
 
-    <!-- PRINT WEEKLY GRID (hidden on screen) -->
-    <div class="print-only print-chore-section">
-      <div class="print-chore-title" style="background:${kid.accent_color||'#FF9A3C'}">
-        📋 Daily Essentials — Check off each day you complete it!
-      </div>
-      <table class="print-grid-table">
-        <thead>
-          <tr>
-            <th class="chore-col">Chore</th>
-            <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${essentials.map(e => `
-            <tr>
-              <td class="chore-name">${e.chore_label}</td>
-              <td><div class="print-checkbox"></div></td>
-              <td><div class="print-checkbox"></div></td>
-              <td><div class="print-checkbox"></div></td>
-              <td><div class="print-checkbox"></div></td>
-              <td><div class="print-checkbox"></div></td>
-              <td><div class="print-checkbox"></div></td>
-              <td><div class="print-checkbox"></div></td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-      <div class="print-points-footer">
-        <span class="print-points-label">⭐ Bonus Points Earned:</span>
-        <div class="print-points-boxes">
-          ${Array(8).fill('<div class="print-point-box">pts</div>').join('')}
+      <div class="print-page-header">
+        <div class="print-hdr-emoji">${kid.emoji}</div>
+        <div class="print-hdr-text">
+          <h2>${kid.name}'s Chore Chart</h2>
+          <p>Summer 2026 · Do your essentials every day — then earn bonus points!</p>
+        </div>
+        <div class="print-week-box">
+          <div class="pwl">Week of</div>
+          <span class="pws"></span>
         </div>
       </div>
+
+      <div class="print-sec-bar" style="background:${kid.accent_color||'#FF9A3C'}">📋 Daily Essentials — Check off each day you complete it!</div>
+      <table class="print-grid-table">
+        <thead><tr>
+          <th class="nc">Chore</th>
+          <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th>
+        </tr></thead>
+        <tbody>
+          ${essentials.map(e=>`<tr>
+            <td class="nc">${e.chore_label}</td>
+            <td><div class="print-cb"></div></td><td><div class="print-cb"></div></td>
+            <td><div class="print-cb"></div></td><td><div class="print-cb"></div></td>
+            <td><div class="print-cb"></div></td><td><div class="print-cb"></div></td>
+            <td><div class="print-cb"></div></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+
+      ${id==='truett' ? `
+        <hr class="print-divider">
+        <div class="print-sec-bar" style="background:#3AB44A">🐢 Truett's Bonus Jobs</div>
+        <table class="print-grid-table">
+          <thead><tr><th class="nc">Job</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th><th style="width:52px">Each</th></tr></thead>
+          <tbody>
+            ${DB.truettBonus.sort((a,b)=>parseInt(a.sort_order)-parseInt(b.sort_order)).map(c=>`<tr>
+              <td class="nc">${c.chore_label}</td>
+              <td><div class="print-cb"></div></td><td><div class="print-cb"></div></td>
+              <td><div class="print-cb"></div></td><td><div class="print-cb"></div></td>
+              <td><div class="print-cb"></div></td><td><div class="print-cb"></div></td>
+              <td><div class="print-cb"></div></td>
+              <td class="pts-col">${c.pts} pt${parseInt(c.pts)>1?'s':''}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      ` : `
+        <hr class="print-divider">
+        <div class="print-bonus-section">
+          <div class="print-sec-bar" style="background:#FF9A3C">⭐ Bonus Chores — Write in what you did and how many points you earned</div>
+          <div class="print-ruled-area">
+            ${Array.from({length:12},(_,i)=>`
+              <div class="print-ruled-line">
+                <span class="prl-num">${i+1}</span>
+                <div class="prl-line"></div>
+                <span class="prl-pts">pts:</span>
+                <div class="prl-box"></div>
+              </div>`).join('')}
+          </div>
+        </div>
+      `}
+
+      <div class="print-pts-footer">
+        <span class="ppf-label">⭐ Week Total:</span>
+        <div class="ppf-total"><div class="ptl">Points Earned</div><span class="ptv"></span></div>
+        <div class="ppf-note">Add up your points and write the total. Hand to Mom or Dad to update your balance!</div>
+      </div>
+
+      <div class="print-page-footer">WOLTERS SUMMER VACATION POINTS 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div>
     </div>
 
-    <!-- SCREEN VIEW (hidden on print via .screen-only) -->
+    <!-- ══ SCREEN VERSION ══ -->
     <div class="screen-only">
       <div class="kid-header" style="background:${kidGrads[id]}">
         <div class="kid-avatar">${kid.emoji}</div>
@@ -1130,7 +1163,37 @@ function renderBonus() {
   ];
   const kidOptions = DB.kids.map(k => `<option value="${k.kid_id}">${k.emoji} ${k.name}</option>`).join('');
 
-  let html = `<div class="card">
+  // ── PRINT VERSION ──
+  let printHtml = `<div class="print-only" style="padding:0">
+    <div style="font-family:'Boogaloo',cursive;font-size:22pt;color:#1A1A2E;padding-bottom:10px;margin-bottom:14px;border-bottom:4px solid #DDD">⭐ Bonus Chore Menu — Summer 2026</div>
+    <div style="font-size:8pt;font-weight:700;color:#888;margin-bottom:14px">Harder jobs = more points. Write the kid's name in the box when complete.</div>`;
+
+  tiers.forEach(tier => {
+    const chores = DB.bonusChores.filter(c=>c.tier===tier.key);
+    const pillCls = tier.key==='hard'?'hard':tier.key==='medium'?'med':'';
+    printHtml += `<div class="print-tier-heading" style="color:${tier.color}">${tier.label} <span style="font-size:8pt;color:#AAA;font-weight:700">${tier.range}</span></div>
+      <div class="print-bonus-grid">
+        ${chores.map(c=>{
+          const pts=parseInt(c.pts)||1;
+          const em=c.chore_label.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u);
+          const emoji=em?em[0]:'⭐';
+          const name=em?c.chore_label.slice(em[0].length).trim():c.chore_label;
+          return `<div class="print-bonus-card">
+            <div class="pbc-emoji">${emoji}</div>
+            <div class="pbc-name">${name}</div>
+            <div class="pbc-footer">
+              <span class="pbc-pts ${pillCls}">${pts} pt${pts>1?'s':''}</span>
+              <span class="pbc-who">Done by:</span>
+              <div class="pbc-who-line"></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  });
+  printHtml += `<div style="border-top:2px dashed #DDD;padding-top:10px;margin-top:6px;font-size:7.5pt;font-weight:700;color:#CCC;text-align:center">WOLTERS SUMMER VACATION POINTS 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div></div>`;
+
+  // ── SCREEN VERSION ──
+  let html = `<div class="screen-only"><div class="card">
     <div class="section-title">⭐ Bonus Chore Menu <span class="tag tag-bonus">Tiered Points</span></div>
     <div class="note">Anyone can grab from this list after essentials are done. Choose who did it — points go to their balance.</div>`;
 
@@ -1168,8 +1231,8 @@ function renderBonus() {
     html += `<div class="tier-heading" style="color:${tier.color}">${tier.label} <span style="font-size:0.8rem;color:#AAA;font-family:'Nunito',sans-serif;font-weight:700">${tier.range}</span></div>
       <div class="bonus-grid">${cards}</div>`;
   });
-  html += `</div><button class="reset-btn" onclick="resetBonus()">↺ Reset All Bonus Chores</button>`;
-  el.innerHTML = html;
+  html += `</div><button class="reset-btn" onclick="resetBonus()">↺ Reset All Bonus Chores</button></div>`;
+  el.innerHTML = printHtml + html;
 }
 
 // ── REWARDS ──
