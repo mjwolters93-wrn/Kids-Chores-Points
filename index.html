@@ -262,44 +262,50 @@ main {
 /* ── BONUS CHORE CARDS ── */
 .bonus-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: 10px;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 .bonus-card {
-  background: #FFFDF7;
+  background: white;
   border: 2px solid #FFE0B2;
   border-radius: 14px;
-  padding: 12px 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.bonus-card:hover { border-color: var(--orange); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(255,154,60,0.14); }
+.bonus-card.claimed { background: #F0FFF4; border-color: var(--mint); }
+.bonus-card.claimed .bonus-name { text-decoration: line-through; color: #AAA; }
+.bonus-emoji { font-size: 1.6rem; line-height: 1; }
+.bonus-name  { font-weight: 800; font-size: 0.88rem; line-height: 1.35; flex: 1; color: #1A1A2E; }
+.bonus-footer {
   display: flex;
   align-items: center;
-  gap: 10px;
-  transition: all 0.2s;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1.5px solid #F0EDE8;
 }
-.bonus-card.claimed { background: #F0FFF4; border-color: var(--mint); }
-.bonus-card.claimed .bonus-label { text-decoration: line-through; color: #AAA; }
-.bonus-check {
-  width: 26px; height: 26px;
-  border-radius: 8px;
-  border: 2.5px solid #DDD;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.85rem;
-  background: white;
-  transition: all 0.2s;
-}
-.bonus-card.claimed .bonus-check { background: var(--mint); border-color: var(--mint); color: white; }
-.bonus-label { flex: 1; font-weight: 700; font-size: 0.85rem; }
+.bonus-card.claimed .bonus-footer { border-top-color: #C8E6C9; }
+.claimed-by { font-size: 0.78rem; font-weight: 800; color: #2E7D32; flex: 1; }
 .who-select {
   font-family: 'Nunito', sans-serif;
-  font-size: 0.73rem;
+  font-size: 0.72rem;
   font-weight: 700;
   border: 1.5px solid #DDD;
   border-radius: 8px;
-  padding: 3px 6px;
+  padding: 4px 6px;
   background: white;
   cursor: pointer;
+  flex: 1;
+  max-width: 120px;
+  transition: border-color 0.2s;
 }
+.who-select:focus { outline: none; border-color: var(--orange); }
 
 /* ── REWARDS ── */
 .reward-grid {
@@ -733,7 +739,7 @@ main {
 // ══════════════════════════════════════════════════════
 // CONFIG — swap in your Sheet ID below
 // ══════════════════════════════════════════════════════
-const SHEET_ID = '1nZpOJT3GODd3H9PXkg6nk25DFoQ5So7QrXuE0cWZHRU';
+const SHEET_ID = 'PASTE_YOUR_SHEET_ID_HERE';
 
 // ══════════════════════════════════════════════════════
 // STATE
@@ -1135,15 +1141,28 @@ function renderBonus() {
       const claimed = bonusClaimed[c.chore_id];
       const pillCls = tier.key==='hard'?'hard':tier.key==='medium'?'med':'';
       const claimedKid = claimed ? DB.kids.find(k=>k.kid_id===claimed) : null;
+      // Extract emoji (first char) and label text
+      const rawLabel = c.chore_label;
+      const emojiMatch = rawLabel.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u);
+      const emoji = emojiMatch ? emojiMatch[0] : '⭐';
+      const nameText = emojiMatch ? rawLabel.slice(emojiMatch[0].length).trim() : rawLabel;
       return `<div class="bonus-card${claimed?' claimed':''}" id="bc-${c.chore_id}">
-        <div class="bonus-check">${claimed?'✓':''}</div>
-        <div class="bonus-label">${c.chore_label}</div>
-        <div class="pts-pill ${pillCls}">${pts} pt${pts>1?'s':''}</div>
-        <select class="who-select" onchange="claimBonus('${c.chore_id}',this,${pts})">
-          <option value="">${claimed && claimedKid ? claimedKid.emoji+' '+claimedKid.name : 'Who?'}</option>
-          ${kidOptions}
-          ${claimed ? '<option value="__unclaim">↩ Unclaim</option>' : ''}
-        </select>
+        <div class="bonus-emoji">${emoji}</div>
+        <div class="bonus-name">${nameText}</div>
+        <div class="bonus-footer">
+          <span class="pts-pill ${pillCls}">${pts} pt${pts>1?'s':''}</span>
+          ${claimed && claimedKid
+            ? `<span class="claimed-by">✓ ${claimedKid.emoji} ${claimedKid.name}</span>
+               <select class="who-select" onchange="claimBonus('${c.chore_id}',this,${pts})" style="max-width:80px">
+                 <option value="">↩ Unclaim</option>
+                 <option value="__unclaim">↩ Unclaim</option>
+               </select>`
+            : `<select class="who-select" onchange="claimBonus('${c.chore_id}',this,${pts})">
+                 <option value="">Who did it?</option>
+                 ${kidOptions}
+               </select>`
+          }
+        </div>
       </div>`;
     }).join('');
     html += `<div class="tier-heading" style="color:${tier.color}">${tier.label} <span style="font-size:0.8rem;color:#AAA;font-family:'Nunito',sans-serif;font-weight:700">${tier.range}</span></div>
