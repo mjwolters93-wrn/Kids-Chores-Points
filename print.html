@@ -235,7 +235,7 @@ body {
 @media print {
   @page { size: letter portrait; margin: 0.52in 0.58in; }
 
-  #toolbar, #status, .page-label, #loading { display: none !important; }
+  #toolbar, #status, .page-label, #loading, #print-tip { display: none !important; }
 
   body { background: white; }
 
@@ -255,6 +255,13 @@ body {
     margin: 0;
   }
   .page:last-child { page-break-after: avoid; }
+
+  /* Force Chrome to print background colors */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
 }
 </style>
 </head>
@@ -264,6 +271,9 @@ body {
   <h1>🖨️ Wolters Chore Charts — Print Preview</h1>
   <a href="index.html" class="tool-btn back-btn">← Back to Tracker</a>
   <button class="tool-btn print-btn" onclick="window.print()">🖨️ Print All Pages</button>
+</div>
+<div id="print-tip" style="background:#FFF8E7;border-bottom:2px solid #FFD93D;padding:8px 20px;font-size:0.82rem;font-weight:700;color:#888;text-align:center">
+  ⚠️ <strong style="color:#1A1A2E">Before printing:</strong> In Chrome's print dialog → More settings → turn on <strong style="color:#FF9A3C">"Background graphics"</strong> to print colors correctly.
 </div>
 
 <div id="status">⏳ Loading chore data from Google Sheet...</div>
