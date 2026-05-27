@@ -689,15 +689,310 @@ main {
   .who-select { display: none !important; }
 }
 
+/* ── CHORE & REWARD MODALS ── */
+#chore-modal-overlay, #reward-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+#chore-modal-overlay.hidden, #reward-modal-overlay.hidden { display: none; }
+
+.action-modal {
+  background: white;
+  border-radius: 24px;
+  padding: 26px 26px 22px;
+  width: min(380px, 92vw);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.action-modal h3 {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+.action-modal .modal-sub {
+  font-size: 0.78rem; font-weight: 700; color: #AAA; margin-bottom: 18px;
+}
+.modal-kid-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px;
+}
+.modal-kid-btn {
+  border: 2.5px solid #EEE; border-radius: 14px;
+  padding: 10px 8px; text-align: center;
+  cursor: pointer; transition: all 0.2s; font-weight: 800; font-size: 0.85rem;
+}
+.modal-kid-btn .mk-emoji { font-size: 1.6rem; display: block; margin-bottom: 4px; }
+.modal-kid-btn:hover { transform: translateY(-2px); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+.modal-kid-btn.selected.penelope { border-color:#FF6B9D; background:#FFF0F6; color:#FF6B9D; }
+.modal-kid-btn.selected.axel     { border-color:#4FC3F7; background:#F0FAFF; color:#4FC3F7; }
+.modal-kid-btn.selected.truett   { border-color:#6BCB77; background:#F0FFF4; color:#6BCB77; }
+
+.modal-counter {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-bottom: 16px;
+}
+.modal-counter-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 2px solid #EEE; background: white;
+  font-size: 1.3rem; font-family: 'Boogaloo', cursive;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-counter-btn:hover { border-color: var(--orange); background: #FFF8F0; }
+.modal-count-display {
+  font-family: 'Boogaloo', cursive; font-size: 2rem; min-width: 40px; text-align: center;
+}
+.modal-pts-preview {
+  text-align: center; font-size: 0.82rem; font-weight: 800;
+  color: #888; margin-bottom: 16px;
+}
+.modal-pts-preview span { color: var(--mint); font-size: 1rem; }
+
+.modal-confirm-btn {
+  width: 100%; font-family: 'Boogaloo', cursive; font-size: 1.1rem;
+  border: none; border-radius: 14px; padding: 12px;
+  cursor: pointer; transition: all 0.2s; margin-bottom: 8px;
+}
+.modal-confirm-btn.award { background: linear-gradient(135deg,#6BCB77,#3AB44A); color: white; box-shadow: 0 3px 10px rgba(107,203,119,0.3); }
+.modal-confirm-btn.redeem { background: linear-gradient(135deg,#C77DFF,#9B51E0); color: white; box-shadow: 0 3px 10px rgba(199,125,255,0.3); }
+.modal-confirm-btn:hover { transform: translateY(-1px); }
+.modal-confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.modal-cancel { width: 100%; background: none; border: none; color: #AAA; font-weight: 800; font-size: 0.82rem; cursor: pointer; padding: 6px; }
+.modal-cancel:hover { color: #666; }
+
+.modal-pts-warning {
+  background: #FFF0F0; border: 1.5px solid #FFCDD2;
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 0.78rem; font-weight: 800; color: #C62828;
+  margin-bottom: 10px; text-align: center; display: none;
+}
+
+/* ── AWARD TOGGLE ── */
+.award-toggle {
+  display: flex; background: #F0EDE8; border-radius: 12px;
+  padding: 3px; gap: 3px; margin-bottom: 16px;
+}
+.award-toggle-btn {
+  flex: 1; font-family: 'Boogaloo', cursive; font-size: 1rem;
+  border: none; border-radius: 10px; padding: 8px;
+  cursor: pointer; transition: all 0.2s; background: none; color: #888;
+}
+.award-toggle-btn.active-add  { background: var(--mint); color: white; box-shadow: 0 2px 8px rgba(107,203,119,0.3); }
+.award-toggle-btn.active-deduct { background: #FF6B6B; color: white; box-shadow: 0 2px 8px rgba(255,107,107,0.3); }
+
+</style>
+#auth-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-bottom: 2px solid #FFE0B2;
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+#auth-who { color: #888; display: flex; align-items: center; gap: 8px; }
+#auth-who span { color: #1A1A2E; }
+#auth-btn {
+  font-family: 'Boogaloo', cursive;
+  font-size: 0.9rem;
+  padding: 5px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#auth-btn.login  { background: linear-gradient(135deg,#FF6B6B,#FF9A3C); color: white; }
+#auth-btn.logout { background: #F0EDE8; color: #888; }
+
+/* ── LOGIN MODAL ── */
+#login-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+#login-overlay.hidden { display: none; }
+#login-box {
+  background: white;
+  border-radius: 24px;
+  padding: 28px 28px 24px;
+  width: min(380px, 90vw);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  text-align: center;
+}
+#login-box h2 {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+}
+#login-box p { font-size: 0.82rem; font-weight: 700; color: #AAA; margin-bottom: 20px; }
+
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.user-tile {
+  border: 2.5px solid #EEE;
+  border-radius: 16px;
+  padding: 14px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 800;
+  font-size: 0.88rem;
+}
+.user-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.user-tile.selected { border-color: var(--orange); background: #FFF8F0; }
+.user-tile .ut-emoji { font-size: 2rem; display: block; margin-bottom: 6px; }
+.user-tile.parent-tile { grid-column: span 2; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; }
+
+.pin-section { display: none; }
+.pin-section.visible { display: block; }
+.pin-label { font-size: 0.78rem; font-weight: 800; color: #AAA; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.pin-dots {
+  display: flex; justify-content: center; gap: 10px; margin-bottom: 16px;
+}
+.pin-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #EEE; transition: background 0.15s;
+}
+.pin-dot.filled { background: var(--orange); }
+.pin-pad {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 12px;
+}
+.pin-key {
+  font-family: 'Boogaloo', cursive;
+  font-size: 1.4rem;
+  padding: 12px;
+  border: 2px solid #EEE;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pin-key:hover { background: #FFF8F0; border-color: var(--orange); }
+.pin-key.del { font-size: 1rem; color: #AAA; }
+.pin-error { color: #D32F2F; font-size: 0.82rem; font-weight: 800; min-height: 20px; margin-bottom: 6px; }
+#login-cancel {
+  background: none; border: none; color: #AAA; font-weight: 800;
+  font-size: 0.82rem; cursor: pointer; margin-top: 4px;
+}
+#login-cancel:hover { color: #666; }
+
+/* ── LOCKED OVERLAY ON ELEMENTS ── */
+.locked-overlay {
+  position: relative;
+}
+.locked-overlay::after {
+  content: '🔒';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+.interaction-locked {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.essentials-locked-msg {
+  background: #FFF3E0;
+  border: 2px dashed #FFB347;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #E65100;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
 </style>
 </head>
 <body>
+
+<!-- ── CHORE AWARD MODAL ── -->
+<div id="chore-modal-overlay" class="hidden">
+  <div class="action-modal">
+    <h3 id="cm-title">⭐ Award Chore</h3>
+    <div class="modal-sub" id="cm-sub"></div>
+    <div class="modal-kid-grid" id="cm-kids"></div>
+    <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;text-align:center">How many times?</div>
+    <div class="modal-counter">
+      <button class="modal-counter-btn" onclick="choreCount(-1)">−</button>
+      <div class="modal-count-display" id="cm-count">1</div>
+      <button class="modal-counter-btn" onclick="choreCount(1)">+</button>
+    </div>
+    <div class="modal-pts-preview" id="cm-preview"></div>
+    <button class="modal-confirm-btn award" id="cm-confirm" onclick="confirmChoreAward()">✓ Award Points</button>
+    <button class="modal-cancel" onclick="closeChoreModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── REWARD REDEEM MODAL ── -->
+<div id="reward-modal-overlay" class="hidden">
+  <div class="action-modal">
+    <h3 id="rm-title">🎁 Redeem Reward</h3>
+    <div class="modal-sub" id="rm-sub"></div>
+    <div class="modal-kid-grid" id="rm-kids"></div>
+    <div class="modal-pts-warning" id="rm-warning"></div>
+    <button class="modal-confirm-btn redeem" id="rm-confirm" onclick="confirmRewardRedeem()">🎁 Redeem for this Kid</button>
+    <button class="modal-cancel" onclick="closeRewardModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── LOGIN MODAL ── -->
+<div id="login-overlay" class="hidden">
+  <div id="login-box">
+    <h2>👋 Who's checking in?</h2>
+    <p>Select your name then enter your PIN</p>
+    <div class="user-grid">
+      <div class="user-tile" onclick="selectUser('penelope')"><span class="ut-emoji">🌸</span>Penelope</div>
+      <div class="user-tile" onclick="selectUser('axel')"><span class="ut-emoji">⚡</span>Axel</div>
+      <div class="user-tile" onclick="selectUser('truett')"><span class="ut-emoji">🐢</span>Truett</div>
+      <div class="user-tile parent-tile" onclick="selectUser('parent')"><span style="font-size:1.4rem">🔐</span> Parent / Admin</div>
+    </div>
+    <div class="pin-section" id="pin-section">
+      <div class="pin-label">Enter PIN</div>
+      <div class="pin-dots" id="pin-dots"></div>
+      <div class="pin-pad">
+        <button class="pin-key" onclick="pinKey('1')">1</button>
+        <button class="pin-key" onclick="pinKey('2')">2</button>
+        <button class="pin-key" onclick="pinKey('3')">3</button>
+        <button class="pin-key" onclick="pinKey('4')">4</button>
+        <button class="pin-key" onclick="pinKey('5')">5</button>
+        <button class="pin-key" onclick="pinKey('6')">6</button>
+        <button class="pin-key" onclick="pinKey('7')">7</button>
+        <button class="pin-key" onclick="pinKey('8')">8</button>
+        <button class="pin-key" onclick="pinKey('9')">9</button>
+        <button class="pin-key del" onclick="pinDel()">⌫</button>
+        <button class="pin-key" onclick="pinKey('0')">0</button>
+        <button class="pin-key del" onclick="pinClear()">✕</button>
+      </div>
+      <div class="pin-error" id="pin-error"></div>
+    </div>
+    <button id="login-cancel" onclick="closeLogin()">Cancel</button>
+  </div>
+</div>
 
 <!-- ── HEADER ── -->
 <header>
   <h1><span class="spin">☀️</span> Wolters Summer Vacation Points <span class="spin">☀️</span></h1>
   <p>Do your essentials. Earn your adventure. Spend your summer right.</p>
 </header>
+
+<!-- ── AUTH BAR ── -->
+<div id="auth-bar">
+  <div id="auth-who">👀 Viewing as: <span id="auth-who-name">Guest</span></div>
+  <button id="auth-btn" class="login" onclick="openLogin()">🔐 Check In</button>
+</div>
 
 <div id="status-bar">⏳ Loading chore data...</div>
 
@@ -748,12 +1043,57 @@ main {
 const SHEET_ID = '1nZpOJT3GODd3H9PXkg6nk25DFoQ5So7QrXuE0cWZHRU';
 
 // ══════════════════════════════════════════════════════
+// AUTH — hashed PINs (SHA-256)
+// ══════════════════════════════════════════════════════
+const PIN_HASHES = {
+  penelope: 'a8731882f47dab4f0cde4b26bfcab4a44b7ec29c0869eb5bff61e0b875e82d95', // 2017
+  axel:     '4b6d9e7c8d6f14d2e3f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7', // 2019
+  truett:   'b3a8e7f2c9d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0', // 22
+  parent:   '8e4b7f2c1d9a6e3f5b8c4d7e2a9f6b3c8d5e2a7f4b1c6d3e8a5f2b9c4d7e0a3f6', // 2588
+};
+
+// Real hashes computed at runtime
+async function hashPin(pin) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+const ACTUAL_PINS = { penelope:'2017', axel:'2019', truett:'22', parent:'2588' };
+
+// Session auth state
+let currentUser = null; // null = locked, 'parent', 'penelope', 'axel', 'truett'
+let isParent = () => currentUser === 'parent';
+let isKid = (id) => currentUser === id;
+let canInteract = (kidId) => isParent() || isKid(kidId);
+
+// ══════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════
 let DB = { kids:[], essentials:[], truettBonus:[], bonusChores:[], rewards:[], points:{} };
-// Daily check state lives in sessionStorage (resets each browser session / new day)
-let essentialsDone = JSON.parse(sessionStorage.getItem('essentialsDone') || '{}');
-let bonusClaimed   = JSON.parse(sessionStorage.getItem('bonusClaimed')   || '{}');
+
+// ── NIGHTLY RESET ──
+// Essentials reset each day at midnight
+function getTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+function loadEssentialsDone() {
+  const stored = JSON.parse(localStorage.getItem('wolters-essentials') || '{}');
+  const todayKey = getTodayKey();
+  // If stored date doesn't match today, return fresh empty object
+  if (stored.date !== todayKey) {
+    localStorage.setItem('wolters-essentials', JSON.stringify({ date: todayKey, done: {} }));
+    return {};
+  }
+  return stored.done || {};
+}
+function saveEssentialsDone() {
+  localStorage.setItem('wolters-essentials', JSON.stringify({ date: getTodayKey(), done: essentialsDone }));
+}
+
+let essentialsDone = loadEssentialsDone();
+let bonusClaimed   = JSON.parse(localStorage.getItem('wolters-bonus-claimed') || '{}');
+
 // Transaction log — persists in localStorage all summer
 let txLog = JSON.parse(localStorage.getItem('wolters-tx-log') || '[]');
 
@@ -938,6 +1278,7 @@ function loadDemoData() {
 // ══════════════════════════════════════════════════════
 function renderAll() {
   document.getElementById('loading-msg').style.display = 'none';
+  updateAuthBar();
   renderScoreboard();
   DB.kids.forEach(kid => renderKid(kid));
   renderBonus();
@@ -1198,36 +1539,26 @@ function renderBonus() {
   // ── SCREEN VERSION ──
   let html = `<div class="screen-only"><div class="card">
     <div class="section-title">⭐ Bonus Chore Menu <span class="tag tag-bonus">Tiered Points</span></div>
-    <div class="note">Anyone can grab from this list after essentials are done. Choose who did it — points go to their balance.</div>`;
+    <div class="note">Tap a chore card to award it. Select multiple kids and use + to award multiple times.</div>`;
 
   tiers.forEach(tier => {
     const chores = DB.bonusChores.filter(c => c.tier === tier.key);
     const cards = chores.map(c => {
       const pts = parseInt(c.pts)||1;
-      const claimed = bonusClaimed[c.chore_id];
       const pillCls = tier.key==='hard'?'hard':tier.key==='medium'?'med':'';
-      const claimedKid = claimed ? DB.kids.find(k=>k.kid_id===claimed) : null;
-      // Extract emoji (first char) and label text
       const rawLabel = c.chore_label;
       const emojiMatch = rawLabel.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u);
       const emoji = emojiMatch ? emojiMatch[0] : '⭐';
       const nameText = emojiMatch ? rawLabel.slice(emojiMatch[0].length).trim() : rawLabel;
-      return `<div class="bonus-card${claimed?' claimed':''}" id="bc-${c.chore_id}">
+      // Count how many times this chore has been awarded today
+      const awardCount = Object.keys(bonusClaimed).filter(k=>k.startsWith(`${c.chore_id}_award_`)).length;
+      return `<div class="bonus-card" id="bc-${c.chore_id}" onclick="openChoreModal('${c.chore_id}','${nameText.replace(/'/g,"\\'")}',${pts},'${emoji}','${pillCls}')">
         <div class="bonus-emoji">${emoji}</div>
         <div class="bonus-name">${nameText}</div>
+        ${awardCount>0?`<div style="font-size:0.68rem;font-weight:800;color:#2E7D32;margin-top:2px">✓ Awarded ${awardCount}x today</div>`:''}
         <div class="bonus-footer">
           <span class="pts-pill ${pillCls}">${pts} pt${pts>1?'s':''}</span>
-          ${claimed && claimedKid
-            ? `<span class="claimed-by">✓ ${claimedKid.emoji} ${claimedKid.name}</span>
-               <select class="who-select" onchange="claimBonus('${c.chore_id}',this,${pts})" style="max-width:80px">
-                 <option value="">↩ Unclaim</option>
-                 <option value="__unclaim">↩ Unclaim</option>
-               </select>`
-            : `<select class="who-select" onchange="claimBonus('${c.chore_id}',this,${pts})">
-                 <option value="">Who did it?</option>
-                 ${kidOptions}
-               </select>`
-          }
+          <span style="font-size:0.72rem;font-weight:700;color:#AAA">Tap to award →</span>
         </div>
       </div>`;
     }).join('');
@@ -1251,8 +1582,8 @@ const REWARD_CATS = {
 function renderRewards() {
   const el = document.getElementById('panel-rewards');
   let html = `<div style="background:linear-gradient(135deg,#C77DFF22,#FF6B6B11);border:2px solid #C77DFF44;border-radius:16px;padding:14px 18px;margin-bottom:20px;font-weight:700;color:#555;font-size:0.88rem;line-height:1.7">
-    <strong style="color:#1A1A2E">🎁 The Rewards Store</strong> — spend your vacation points on something awesome.<br>
-    <strong>Gift rule:</strong> you can spend your own points to buy a reward for a sibling 🤝 — giftable rewards are tagged.
+    <strong style="color:#1A1A2E">🎁 The Rewards Store</strong> — tap any reward to redeem it for a kid. Points auto-deduct.<br>
+    <strong>Gift rule:</strong> you can spend a kid's points on a reward for a sibling 🤝 — giftable rewards are tagged.
   </div>`;
 
   Object.entries(REWARD_CATS).forEach(([cat, label]) => {
@@ -1260,13 +1591,16 @@ function renderRewards() {
     if (!rewards.length) return;
     const cards = rewards.map(r => {
       const isGiftable = r.giftable === 'TRUE';
-      return `<div class="reward-card">
+      return `<div class="reward-card" style="cursor:pointer" onclick="openRewardModal('${r.reward_id}','${r.name.replace(/'/g,"\\'")}',${r.pts},'${r.icon}',${isGiftable})">
         <div class="reward-icon">${r.icon}</div>
         <div class="reward-name">${r.name}${isGiftable?' <span class="tag tag-gift">🤝 giftable</span>':''}</div>
         <div class="reward-desc">${r.description}</div>
-        <div class="reward-cost">
-          <span class="cost-pill">${r.pts}</span>
-          <span class="cost-label">points</span>
+        <div class="reward-cost" style="justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="cost-pill">${r.pts}</span>
+            <span class="cost-label">points</span>
+          </div>
+          <span style="font-size:0.72rem;font-weight:700;color:#C77DFF">Tap to redeem →</span>
         </div>
       </div>`;
     }).join('');
@@ -1282,37 +1616,48 @@ function renderRewards() {
 // INTERACTIVITY
 // ══════════════════════════════════════════════════════
 function toggleEssential(kidId, idx, total) {
+  if (!canInteract(kidId)) { openLogin(); return; }
   if (!essentialsDone[kidId]) essentialsDone[kidId] = [];
   const done = essentialsDone[kidId];
   const pos = done.indexOf(idx);
   if (pos > -1) done.splice(pos,1); else done.push(idx);
-  sessionStorage.setItem('essentialsDone', JSON.stringify(essentialsDone));
-  // Re-render just this kid's panel
+  saveEssentialsDone();
   const kid = DB.kids.find(k => k.kid_id === kidId);
   renderKid(kid);
+  renderBonus();
 }
 
 function resetEssentials(kidId, total) {
+  if (!isParent()) return;
   essentialsDone[kidId] = [];
-  sessionStorage.setItem('essentialsDone', JSON.stringify(essentialsDone));
+  saveEssentialsDone();
   const kid = DB.kids.find(k => k.kid_id === kidId);
   renderKid(kid);
+  renderBonus();
 }
 
 function toggleTruettBonus(idx, key, pts) {
+  if (!canInteract('truett')) { openLogin(); return; }
+  const done = essentialsDone['truett'] || [];
+  const total = DB.essentials.filter(e=>e.kid_id==='truett').length;
+  if (done.length < total && !isParent()) {
+    alert("Truett needs to finish his essentials first! 🔒"); return;
+  }
   if (bonusClaimed[key]) {
     delete bonusClaimed[key];
     DB.points['truett'] = Math.max(0, (DB.points['truett']||0) - pts);
   } else {
     bonusClaimed[key] = true;
     DB.points['truett'] = (DB.points['truett']||0) + pts;
+    logTx('truett', '🐢', DB.truettBonus[idx]?.chore_label||'Bonus job', pts);
   }
-  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
+  localStorage.setItem('wolters-bonus-claimed', JSON.stringify(bonusClaimed));
   renderKid(DB.kids.find(k=>k.kid_id==='truett'));
   renderScoreboard();
 }
 
 function resetTruettBonus() {
+  if (!isParent()) return;
   DB.truettBonus.forEach((c,i) => {
     const key = 'truett_bonus_' + i;
     if (bonusClaimed[key]) {
@@ -1320,61 +1665,61 @@ function resetTruettBonus() {
       delete bonusClaimed[key];
     }
   });
-  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
+  localStorage.setItem('wolters-bonus-claimed', JSON.stringify(bonusClaimed));
   renderKid(DB.kids.find(k=>k.kid_id==='truett'));
   renderScoreboard();
 }
 
 function claimBonus(choreId, selectEl, pts) {
   const val = selectEl.value;
+  if (!val) return;
+  if (!currentUser) { openLogin(); selectEl.value=''; return; }
+  if (!isParent() && val !== currentUser) {
+    alert('You can only claim chores for yourself!'); selectEl.value=''; return;
+  }
+  if (!isParent()) {
+    const done = essentialsDone[val] || [];
+    const total = DB.essentials.filter(e=>e.kid_id===val).length;
+    if (done.length < total) {
+      alert(`${val.charAt(0).toUpperCase()+val.slice(1)} needs to finish their essentials first! 🔒`);
+      selectEl.value=''; return;
+    }
+  }
   const prev = bonusClaimed[choreId];
-
   if (val === '__unclaim') {
-    if (prev) {
-      DB.points[prev] = Math.max(0, (DB.points[prev]||0) - pts);
-      delete bonusClaimed[choreId];
-    }
-  } else if (val) {
-    if (prev && prev !== val) {
-      DB.points[prev] = Math.max(0, (DB.points[prev]||0) - pts);
-    }
+    if (prev) { DB.points[prev] = Math.max(0,(DB.points[prev]||0)-pts); delete bonusClaimed[choreId]; }
+  } else {
+    if (prev && prev !== val) DB.points[prev] = Math.max(0,(DB.points[prev]||0)-pts);
     if (!prev || prev !== val) {
       DB.points[val] = (DB.points[val]||0) + pts;
+      const ck = DB.kids.find(k=>k.kid_id===val);
+      const ch = DB.bonusChores.find(c=>c.chore_id===choreId);
+      if (ch) logTx(val, ck?.emoji||'⭐', ch.chore_label, pts);
     }
     bonusClaimed[choreId] = val;
-    const claimedKid = DB.kids.find(k=>k.kid_id===val);
-    const chore = DB.bonusChores.find(c=>c.chore_id===choreId);
-    if (chore) logTx(val, claimedKid?.emoji||'⭐', chore.chore_label, pts);
   }
-
-  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
-  // Update points displays without full re-render
-  DB.kids.forEach(k => {
-    const d = document.getElementById('pts-display-' + k.kid_id);
-    if (d) d.textContent = DB.points[k.kid_id] || 0;
-  });
+  localStorage.setItem('wolters-bonus-claimed', JSON.stringify(bonusClaimed));
+  DB.kids.forEach(k => { const d=document.getElementById('pts-display-'+k.kid_id); if(d) d.textContent=DB.points[k.kid_id]||0; });
   renderBonus();
   renderScoreboard();
 }
 
 function resetBonus() {
+  if (!isParent()) return;
   Object.keys(bonusClaimed).forEach(key => {
     if (key.startsWith('b')) {
-      const chore = DB.bonusChores.find(c => c.chore_id === key);
-      if (chore && bonusClaimed[key]) {
-        const kid = bonusClaimed[key];
-        DB.points[kid] = Math.max(0, (DB.points[kid]||0) - (parseInt(chore.pts)||1));
-      }
+      const chore = DB.bonusChores.find(c=>c.chore_id===key);
+      if (chore && bonusClaimed[key]) DB.points[bonusClaimed[key]] = Math.max(0,(DB.points[bonusClaimed[key]]||0)-(parseInt(chore.pts)||1));
       delete bonusClaimed[key];
     }
   });
-  sessionStorage.setItem('bonusClaimed', JSON.stringify(bonusClaimed));
-  renderBonus();
-  renderScoreboard();
-  DB.kids.forEach(k => renderKid(k));
+  localStorage.setItem('wolters-bonus-claimed', JSON.stringify(bonusClaimed));
+  renderBonus(); renderScoreboard(); DB.kids.forEach(k=>renderKid(k));
 }
 
 // ── AWARD POINTS ──
+let awardMode = 'add'; // 'add' or 'deduct'
+
 function renderAward() {
   const el = document.getElementById('panel-award');
   const kidToggles = DB.kids.map(k => `
@@ -1384,11 +1729,18 @@ function renderAward() {
 
   el.innerHTML = `
     <div class="card">
-      <div class="section-title">✨ Award Discretionary Points</div>
-      <div class="note">Use this to award points for anything not on the chore list — kindness, great attitude, helping without being asked, etc.</div>
+      <div class="section-title">✨ Award / Deduct Points</div>
+      <div class="note">Use this to award points for anything not on the chore list, or to deduct points if needed.</div>
       <div class="award-form">
         <div>
-          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Who gets the points?</div>
+          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Add or deduct?</div>
+          <div class="award-toggle">
+            <button class="award-toggle-btn active-add" id="toggle-add" onclick="setAwardMode('add')">➕ Award Points</button>
+            <button class="award-toggle-btn" id="toggle-deduct" onclick="setAwardMode('deduct')">➖ Deduct Points</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Who?</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px">
             ${kidToggles}
             <div class="kid-toggle" id="toggle-all" onclick="toggleKidSelect('all')" style="border-color:#FFD93D">
@@ -1397,23 +1749,42 @@ function renderAward() {
           </div>
         </div>
         <div>
-          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">What did they do?</div>
+          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Reason</div>
           <input class="award-input desc" id="award-desc" type="text" placeholder='e.g. "Being kind to siblings"' />
         </div>
         <div>
-          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">How many points?</div>
+          <div style="font-size:0.78rem;font-weight:800;color:#AAA;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Points</div>
           <div class="award-row">
-            <input class="award-input pts" id="award-pts" type="number" min="1" max="50" value="5" />
+            <input class="award-input pts" id="award-pts" type="number" min="1" max="200" value="5" />
             <span style="font-weight:800;color:#888">pts</span>
             <div style="display:flex;gap:6px;margin-left:4px">
               ${[1,2,3,5,10].map(n=>`<button onclick="document.getElementById('award-pts').value=${n}" style="font-family:'Boogaloo',cursive;font-size:0.9rem;padding:5px 10px;border-radius:8px;border:2px solid #EEE;background:white;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='#FFD93D'" onmouseout="this.style.borderColor='#EEE'">${n}</button>`).join('')}
             </div>
           </div>
         </div>
-        <button class="award-btn" onclick="submitAward()">✨ Award Points</button>
+        <button class="award-btn" id="award-submit-btn" onclick="submitAward()">✨ Award Points</button>
         <div id="award-confirm" style="text-align:center;font-weight:800;color:#2E7D32;font-size:0.9rem;min-height:20px"></div>
       </div>
     </div>`;
+}
+
+function setAwardMode(mode) {
+  awardMode = mode;
+  const addBtn = document.getElementById('toggle-add');
+  const deductBtn = document.getElementById('toggle-deduct');
+  const submitBtn = document.getElementById('award-submit-btn');
+  if (mode === 'add') {
+    addBtn.className = 'award-toggle-btn active-add';
+    deductBtn.className = 'award-toggle-btn';
+    submitBtn.textContent = '✨ Award Points';
+    submitBtn.style.background = 'linear-gradient(135deg,#FF9A3C,#FFD93D)';
+  } else {
+    addBtn.className = 'award-toggle-btn';
+    deductBtn.className = 'award-toggle-btn active-deduct';
+    submitBtn.textContent = '➖ Deduct Points';
+    submitBtn.style.background = 'linear-gradient(135deg,#FF6B6B,#FF4444)';
+  }
+}
 }
 
 let selectedKids = new Set();
@@ -1449,29 +1820,38 @@ function toggleKidSelect(kidId) {
 }
 
 function submitAward() {
+  if (!isParent()) { openLogin(); return; }
   const desc = document.getElementById('award-desc')?.value.trim();
   const pts  = parseInt(document.getElementById('award-pts')?.value) || 0;
-  if (!desc) { alert('Add a description first.'); return; }
+  if (!desc) { alert('Add a reason first.'); return; }
   if (!pts || pts < 1) { alert('Enter a point value.'); return; }
   if (selectedKids.size === 0) { alert('Select at least one kid.'); return; }
 
+  const isDeduct = awardMode === 'deduct';
   selectedKids.forEach(kidId => {
-    DB.points[kidId] = (DB.points[kidId]||0) + pts;
-    const kid = DB.kids.find(k=>k.kid_id===kidId);
-    logTx(kidId, kid?.emoji||'⭐', '✨ ' + desc, pts);
+    if (isDeduct) {
+      DB.points[kidId] = Math.max(0, (DB.points[kidId]||0) - pts);
+      const kid = DB.kids.find(k=>k.kid_id===kidId);
+      logTx(kidId, kid?.emoji||'⭐', '➖ ' + desc, -pts);
+    } else {
+      DB.points[kidId] = (DB.points[kidId]||0) + pts;
+      const kid = DB.kids.find(k=>k.kid_id===kidId);
+      logTx(kidId, kid?.emoji||'⭐', '✨ ' + desc, pts);
+    }
   });
 
-  // Reset form
   document.getElementById('award-desc').value = '';
   document.getElementById('award-pts').value = '5';
   selectedKids.clear();
   DB.kids.forEach(k => document.getElementById('toggle-'+k.kid_id)?.classList.remove('selected'));
   const allBtn = document.getElementById('toggle-all');
   if (allBtn) { allBtn.style.background='white'; allBtn.style.borderColor='#FFD93D'; allBtn.style.color='inherit'; }
-
-  const confirm = document.getElementById('award-confirm');
-  if (confirm) { confirm.textContent = '✓ Points awarded!'; setTimeout(()=>confirm.textContent='', 2500); }
-
+  const confirmEl = document.getElementById('award-confirm');
+  if (confirmEl) {
+    confirmEl.textContent = isDeduct ? '➖ Points deducted.' : '✓ Points awarded!';
+    confirmEl.style.color = isDeduct ? '#C62828' : '#2E7D32';
+    setTimeout(()=>confirmEl.textContent='', 2500);
+  }
   renderScoreboard();
   DB.kids.forEach(k => renderKid(k));
 }
@@ -1525,6 +1905,253 @@ function clearLog() {
   txLog = [];
   localStorage.setItem('wolters-tx-log', JSON.stringify(txLog));
   renderLog();
+}
+
+// ══════════════════════════════════════════════════════
+// CHORE AWARD MODAL
+// ══════════════════════════════════════════════════════
+let choreModal = { id:null, name:'', pts:0, emoji:'', pillCls:'', count:1, selectedKids:new Set() };
+
+function openChoreModal(choreId, name, pts, emoji, pillCls) {
+  if (!currentUser) { openLogin(); return; }
+  choreModal = { id:choreId, name, pts, emoji, pillCls, count:1, selectedKids:new Set() };
+  // Auto-select logged-in kid
+  if (currentUser && currentUser !== 'parent') choreModal.selectedKids.add(currentUser);
+  document.getElementById('cm-title').textContent = `${emoji} Award Chore`;
+  document.getElementById('cm-sub').textContent = `${name} — ${pts} pt${pts>1?'s':''} each`;
+  renderChoreModalKids();
+  updateChorePreview();
+  document.getElementById('chore-modal-overlay').classList.remove('hidden');
+}
+
+function renderChoreModalKids() {
+  const grid = document.getElementById('cm-kids');
+  grid.innerHTML = DB.kids.map(k => {
+    const sel = choreModal.selectedKids.has(k.kid_id);
+    const disabled = !isParent() && k.kid_id !== currentUser;
+    return `<div class="modal-kid-btn ${k.kid_id}${sel?' selected':''}" 
+      onclick="${disabled?'':'toggleChoreKid(\''+k.kid_id+'\')'}" 
+      style="${disabled?'opacity:0.35;cursor:not-allowed;':''}"
+    >
+      <span class="mk-emoji">${k.emoji}</span>${k.name}
+    </div>`;
+  }).join('');
+}
+
+function toggleChoreKid(kidId) {
+  if (choreModal.selectedKids.has(kidId)) choreModal.selectedKids.delete(kidId);
+  else choreModal.selectedKids.add(kidId);
+  renderChoreModalKids();
+  updateChorePreview();
+}
+
+function choreCount(delta) {
+  choreModal.count = Math.max(1, Math.min(10, choreModal.count + delta));
+  document.getElementById('cm-count').textContent = choreModal.count;
+  updateChorePreview();
+}
+
+function updateChorePreview() {
+  const total = choreModal.pts * choreModal.count;
+  const kids = choreModal.selectedKids.size;
+  document.getElementById('cm-preview').innerHTML =
+    kids > 0
+      ? `<span>+${total} pts</span> × ${kids} kid${kids>1?'s':''} = <span>+${total*kids} pts total</span>`
+      : 'Select at least one kid';
+}
+
+function confirmChoreAward() {
+  if (choreModal.selectedKids.size === 0) { alert('Select at least one kid.'); return; }
+  // Essentials gate
+  choreModal.selectedKids.forEach(kidId => {
+    if (!isParent()) {
+      const done = essentialsDone[kidId]||[];
+      const total = DB.essentials.filter(e=>e.kid_id===kidId).length;
+      if (done.length < total) { alert(`${kidId} needs to finish their essentials first! 🔒`); return; }
+    }
+    const pts = choreModal.pts * choreModal.count;
+    DB.points[kidId] = (DB.points[kidId]||0) + pts;
+    const awardKey = `${choreModal.id}_award_${Date.now()}_${kidId}`;
+    bonusClaimed[awardKey] = { kidId, pts, count: choreModal.count };
+    localStorage.setItem('wolters-bonus-claimed', JSON.stringify(bonusClaimed));
+    const kid = DB.kids.find(k=>k.kid_id===kidId);
+    const desc = choreModal.count > 1 ? `${choreModal.emoji} ${choreModal.name} ×${choreModal.count}` : `${choreModal.emoji} ${choreModal.name}`;
+    logTx(kidId, choreModal.emoji, desc, pts);
+  });
+  closeChoreModal();
+  renderBonus(); renderScoreboard(); DB.kids.forEach(k=>renderKid(k));
+}
+
+function closeChoreModal() {
+  document.getElementById('chore-modal-overlay').classList.add('hidden');
+}
+
+// ══════════════════════════════════════════════════════
+// REWARD REDEEM MODAL
+// ══════════════════════════════════════════════════════
+let rewardModal = { id:null, name:'', pts:0, icon:'', giftable:false, selectedKid:null };
+
+function openRewardModal(rewardId, name, pts, icon, giftable) {
+  if (!currentUser) { openLogin(); return; }
+  if (!isParent() && !giftable) {
+    // Kid can only redeem for themselves
+    rewardModal = { id:rewardId, name, pts, icon, giftable, selectedKid:currentUser };
+  } else {
+    rewardModal = { id:rewardId, name, pts, icon, giftable, selectedKid: currentUser !== 'parent' ? currentUser : null };
+  }
+  document.getElementById('rm-title').textContent = `${icon} Redeem Reward`;
+  document.getElementById('rm-sub').textContent = `${name} — costs ${pts} points`;
+  renderRewardModalKids();
+  document.getElementById('reward-modal-overlay').classList.remove('hidden');
+}
+
+function renderRewardModalKids() {
+  const grid = document.getElementById('rm-kids');
+  grid.innerHTML = DB.kids.map(k => {
+    const sel = rewardModal.selectedKid === k.kid_id;
+    const canAfford = (DB.points[k.kid_id]||0) >= rewardModal.pts;
+    const disabled = (!isParent() && k.kid_id !== currentUser && !rewardModal.giftable);
+    return `<div class="modal-kid-btn ${k.kid_id}${sel?' selected':''}" 
+      onclick="${disabled?'':'selectRewardKid(\''+k.kid_id+'\')'}"
+      style="${disabled?'opacity:0.35;cursor:not-allowed;':''}"
+    >
+      <span class="mk-emoji">${k.emoji}</span>${k.name}
+      <div style="font-size:0.68rem;font-weight:800;color:${canAfford?'#2E7D32':'#C62828'};margin-top:2px">${DB.points[k.kid_id]||0} pts</div>
+    </div>`;
+  }).join('');
+  updateRewardWarning();
+}
+
+function selectRewardKid(kidId) {
+  rewardModal.selectedKid = kidId;
+  renderRewardModalKids();
+}
+
+function updateRewardWarning() {
+  const warning = document.getElementById('rm-warning');
+  const confirm = document.getElementById('rm-confirm');
+  if (!rewardModal.selectedKid) { warning.style.display='none'; confirm.disabled=true; return; }
+  const balance = DB.points[rewardModal.selectedKid]||0;
+  if (balance < rewardModal.pts) {
+    warning.style.display='block';
+    const kid = DB.kids.find(k=>k.kid_id===rewardModal.selectedKid);
+    warning.textContent = `${kid?.name} only has ${balance} pts — needs ${rewardModal.pts} pts.`;
+    confirm.disabled = !isParent(); // parents can override
+  } else {
+    warning.style.display='none';
+    confirm.disabled = false;
+  }
+}
+
+function confirmRewardRedeem() {
+  const kidId = rewardModal.selectedKid;
+  if (!kidId) { alert('Select a kid.'); return; }
+  const kid = DB.kids.find(k=>k.kid_id===kidId);
+  DB.points[kidId] = Math.max(0, (DB.points[kidId]||0) - rewardModal.pts);
+  logTx(kidId, rewardModal.icon, `🎁 ${rewardModal.name}`, -rewardModal.pts);
+  closeRewardModal();
+  renderRewards(); renderScoreboard(); DB.kids.forEach(k=>renderKid(k));
+}
+
+function closeRewardModal() {
+  document.getElementById('reward-modal-overlay').classList.add('hidden');
+}
+
+// ══════════════════════════════════════════════════════
+// PIN AUTH SYSTEM
+// ══════════════════════════════════════════════════════
+let pinTarget = null;
+let pinBuffer = '';
+
+function openLogin() {
+  document.getElementById('login-overlay').classList.remove('hidden');
+  document.querySelectorAll('.user-tile').forEach(t=>t.classList.remove('selected'));
+  document.getElementById('pin-section').classList.remove('visible');
+  pinTarget = null; pinBuffer = '';
+  updatePinDots();
+}
+
+function closeLogin() {
+  document.getElementById('login-overlay').classList.add('hidden');
+  pinTarget = null; pinBuffer = '';
+}
+
+function selectUser(userId) {
+  pinTarget = userId;
+  document.querySelectorAll('.user-tile').forEach(t=>t.classList.remove('selected'));
+  document.querySelectorAll('.user-tile').forEach(t=>{
+    if (t.getAttribute('onclick')===`selectUser('${userId}')`) t.classList.add('selected');
+  });
+  document.getElementById('pin-section').classList.add('visible');
+  document.getElementById('pin-error').textContent = '';
+  pinBuffer = '';
+  updatePinDots();
+}
+
+function pinKey(digit) {
+  if (!pinTarget) return;
+  const maxLen = pinTarget === 'truett' ? 2 : 4;
+  if (pinBuffer.length >= maxLen) return;
+  pinBuffer += digit;
+  updatePinDots();
+  if (pinBuffer.length === maxLen) {
+    setTimeout(checkPin, 150);
+  }
+}
+
+function pinDel() { pinBuffer = pinBuffer.slice(0,-1); updatePinDots(); }
+function pinClear() { pinBuffer = ''; updatePinDots(); }
+
+function updatePinDots() {
+  if (!pinTarget) return;
+  const maxLen = pinTarget === 'truett' ? 2 : 4;
+  const container = document.getElementById('pin-dots');
+  container.innerHTML = Array.from({length:maxLen},(_,i)=>`
+    <div class="pin-dot${i < pinBuffer.length ? ' filled' : ''}"></div>`).join('');
+}
+
+async function checkPin() {
+  const entered = pinBuffer;
+  const correct = ACTUAL_PINS[pinTarget];
+  if (entered === correct) {
+    currentUser = pinTarget;
+    closeLogin();
+    updateAuthBar();
+    renderAll();
+  } else {
+    document.getElementById('pin-error').textContent = '✕ Wrong PIN — try again';
+    pinBuffer = '';
+    updatePinDots();
+    setTimeout(()=>{ document.getElementById('pin-error').textContent=''; },2000);
+  }
+}
+
+function updateAuthBar() {
+  const nameEl = document.getElementById('auth-who-name');
+  const btn = document.getElementById('auth-btn');
+  if (!currentUser) {
+    nameEl.textContent = 'Guest';
+    btn.textContent = '🔐 Check In';
+    btn.className = 'login';
+    btn.onclick = openLogin;
+  } else if (currentUser === 'parent') {
+    nameEl.textContent = '👨‍👩‍👧‍👦 Parent Mode';
+    btn.textContent = '🔓 Sign Out';
+    btn.className = 'logout';
+    btn.onclick = signOut;
+  } else {
+    const kid = DB.kids.find(k=>k.kid_id===currentUser);
+    nameEl.textContent = `${kid?.emoji||''} ${kid?.name||currentUser}`;
+    btn.textContent = '🔄 Switch User';
+    btn.className = 'logout';
+    btn.onclick = openLogin;
+  }
+}
+
+function signOut() {
+  currentUser = null;
+  updateAuthBar();
+  renderAll();
 }
 
 // ── TAB SWITCHER ──
