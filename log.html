@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📒 Wolters Transaction Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: #F0F0F0; color: #1A1A2E; }
+
+/* ── TOOLBAR ── */
+#toolbar {
+  background: linear-gradient(135deg, #FF6B6B, #FF9A3C);
+  padding: 14px 24px; display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 3px 12px rgba(255,107,107,0.3);
+  position: sticky; top: 0; z-index: 100;
+}
+#toolbar h1 { font-family:'Boogaloo',cursive; font-size:1.3rem; color:white; flex:1; }
+.tbtn { font-family:'Boogaloo',cursive; font-size:0.95rem; padding:8px 18px; border-radius:10px; border:none; cursor:pointer; transition:all 0.2s; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.tbtn.back  { background:rgba(255,255,255,0.2); color:white; }
+.tbtn.back:hover { background:rgba(255,255,255,0.3); }
+
+#status { background:white; text-align:center; padding:7px; font-size:0.78rem; font-weight:800; color:#888; border-bottom:2px solid #EEE; }
+#status.ok { color:#2E7D32; } #status.err { color:#C62828; background:#FFF0F0; }
+#loading { text-align:center; padding:80px 20px; font-family:'Boogaloo',cursive; font-size:1.4rem; color:#AAA; }
+
+/* ── CONTROLS ── */
+#controls {
+  max-width: 860px; margin: 24px auto 0; padding: 0 20px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.view-toggle {
+  display: flex; background: white; border-radius: 12px;
+  padding: 4px; gap: 4px; border: 2px solid #EEE;
+}
+.view-btn {
+  font-family:'Boogaloo',cursive; font-size:0.95rem;
+  padding:6px 16px; border-radius:9px; border:none;
+  cursor:pointer; transition:all 0.2s; color:#888; background:none;
+}
+.view-btn.active { background: linear-gradient(135deg,#FF6B6B,#FF9A3C); color:white; }
+
+.kid-filter {
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.kf-btn {
+  font-family:'Boogaloo',cursive; font-size:0.88rem;
+  padding:5px 14px; border-radius:20px; border:2px solid #EEE;
+  cursor:pointer; transition:all 0.2s; background:white; color:#888;
+}
+.kf-btn.active { border-color:var(--c); background:var(--bg); color:var(--c); }
+
+.print-day-btn {
+  font-family:'Boogaloo',cursive; font-size:0.95rem;
+  background: white; border:2px solid #EEE; border-radius:10px;
+  padding:6px 16px; cursor:pointer; color:#888; transition:all 0.2s;
+  margin-left:auto;
+}
+.print-day-btn:hover { border-color:#FF9A3C; color:#FF9A3C; }
+
+/* ── MAIN ── */
+#main { max-width:860px; margin:16px auto 60px; padding:0 20px; }
+
+/* ── DAY GROUP ── */
+.day-group { margin-bottom:20px; }
+.day-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px; padding-bottom:8px;
+  border-bottom:2px solid #EEE;
+}
+.day-title { font-family:'Boogaloo',cursive; font-size:1.2rem; color:#1A1A2E; }
+.day-meta  { font-size:0.78rem; font-weight:800; color:#AAA; }
+.day-print-btn {
+  font-family:'Boogaloo',cursive; font-size:0.82rem;
+  background:linear-gradient(135deg,#FF6B6B,#FF9A3C);
+  color:white; border:none; border-radius:8px;
+  padding:5px 12px; cursor:pointer; transition:all 0.2s;
+  white-space:nowrap;
+}
+.day-print-btn:hover { transform:translateY(-1px); }
+
+/* ── LOG ENTRIES ── */
+.log-entry {
+  display:flex; align-items:center; gap:12px;
+  padding:9px 14px; border-radius:12px; margin-bottom:5px;
+  border:1.5px solid #F0EDE8; background:white; transition:background 0.15s;
+}
+.log-entry:hover { background:#FFFDF7; }
+.log-kid-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.log-emoji   { font-size:1rem; flex-shrink:0; }
+.log-desc    { flex:1; font-weight:700; font-size:0.88rem; }
+.log-kid-name { font-size:0.72rem; font-weight:800; color:#AAA; white-space:nowrap; }
+.log-date    { font-size:0.72rem; color:#AAA; font-weight:700; white-space:nowrap; }
+.log-pts     { font-family:'Boogaloo',cursive; font-size:1.05rem; min-width:48px; text-align:right; }
+.log-pts.pos { color:#2E7D32; }
+.log-pts.neg { color:#C62828; }
+
+/* ── SUMMARY CARDS ── */
+.summary-row {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:16px;
+}
+.summary-card {
+  background:white; border-radius:14px; padding:14px 16px;
+  border:2px solid #F0EDE8; text-align:center;
+}
+.sc-emoji  { font-size:1.8rem; display:block; margin-bottom:4px; }
+.sc-name   { font-family:'Boogaloo',cursive; font-size:1rem; }
+.sc-pts    { font-family:'Boogaloo',cursive; font-size:1.6rem; display:block; }
+.sc-pts.pos { color:#2E7D32; }
+.sc-pts.neg { color:#C62828; }
+.sc-label  { font-size:0.65rem; font-weight:800; color:#AAA; text-transform:uppercase; letter-spacing:0.5px; }
+
+.empty-msg {
+  text-align:center; padding:40px 20px;
+  font-family:'Boogaloo',cursive; font-size:1.2rem; color:#CCC;
+}
+
+/* ══════════════════════════════
+   PRINT — receipt style
+   ══════════════════════════════ */
+@media print {
+  * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  @page { size:letter portrait; margin:0.5in; }
+
+  #toolbar, #controls, #status, #loading,
+  .day-print-btn, .day-header { display:none !important; }
+
+  body { background:white; }
+  #main { max-width:100%; padding:0; margin:0; }
+
+  .day-group:not(.printing) { display:none !important; }
+  .day-group.printing { display:block !important; }
+
+  /* Receipt header */
+  .day-group.printing::before {
+    content: '';
+    display: block;
+  }
+  .print-receipt-header {
+    display:flex !important;
+    align-items:center; justify-content:space-between;
+    padding-bottom:12px; margin-bottom:16px;
+    border-bottom:3px solid #1A1A2E;
+  }
+  .print-receipt-title {
+    font-family:'Boogaloo',cursive; font-size:1.6rem; color:#1A1A2E;
+  }
+  .print-receipt-sub {
+    font-size:0.75rem; font-weight:700; color:#888; margin-top:2px;
+  }
+
+  .log-entry { border:1px solid #EEE; border-radius:6px; }
+  .summary-card { border:1px solid #EEE; }
+}
+
+/* Hide print-only elements on screen */
+.print-receipt-header { display:none; }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <h1>📒 Wolters Transaction Log</h1>
+  <a href="index.html" class="tbtn back">← Back to Tracker</a>
+</div>
+<div id="status">⏳ Loading log data...</div>
+<div id="loading">📒 Loading...</div>
+
+<div id="controls" style="display:none">
+  <div class="view-toggle">
+    <button class="view-btn active" id="btn-today" onclick="setView('today')">📅 Today</button>
+    <button class="view-btn" id="btn-all"   onclick="setView('all')">📋 Full Log</button>
+  </div>
+  <div class="kid-filter" id="kid-filters"></div>
+</div>
+
+<div id="main"></div>
+
+<script>
+const SHEET_ID = '1nZpOJT3GODd3H9PXkg6nk25DFoQ5So7QrXuE0cWZHRU';
+
+const KID_COLORS = {
+  penelope: { dot:'#FF6B9D', bg:'rgba(255,107,157,0.08)', c:'#FF6B9D', emoji:'🌸', name:'Penelope' },
+  axel:     { dot:'#4FC3F7', bg:'rgba(79,195,247,0.08)',  c:'#4FC3F7', emoji:'⚡', name:'Axel'     },
+  truett:   { dot:'#6BCB77', bg:'rgba(107,203,119,0.08)', c:'#6BCB77', emoji:'🐢', name:'Truett'   },
+};
+
+let ALL_ENTRIES = [];
+let currentView = 'today';
+let activeKid   = 'all';
+
+function sheetUrl(tab) {
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`;
+}
+async function fetchCSV(tab) {
+  const r = await fetch(sheetUrl(tab), { cache:'no-cache' });
+  if (!r.ok) throw new Error(`Cannot load "${tab}"`);
+  return parseCSV(await r.text());
+}
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = csvRow(lines[0]);
+  return lines.slice(1).filter(l=>l.trim()).map(line => {
+    const vals = csvRow(line), obj = {};
+    headers.forEach((h,i) => obj[h.trim()] = (vals[i]||'').trim());
+    return obj;
+  });
+}
+function csvRow(line) {
+  const cols=[]; let cur='', inQ=false;
+  for (let i=0; i<line.length; i++) {
+    const c=line[i];
+    if (c==='"') { inQ=!inQ; }
+    else if (c===',' && !inQ) { cols.push(cur); cur=''; }
+    else { cur+=c; }
+  }
+  cols.push(cur); return cols;
+}
+
+function setStatus(msg,cls){ const el=document.getElementById('status'); el.textContent=msg; el.className=cls||''; }
+
+function getTodayStr() {
+  return new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+
+async function load() {
+  try {
+    // Try Sheet first, fall back to localStorage
+    let entries = [];
+    try {
+      const rows = await fetchCSV('TRANSACTION_LOG');
+      entries = rows.map(r => ({
+        kidId: r.kid_id,
+        emoji: r.emoji,
+        desc:  r.description,
+        pts:   parseInt(r.pts)||0,
+        date:  r.date ? new Date(r.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '?',
+        rawDate: r.date || '',
+      })).reverse(); // newest first
+    } catch(e) {
+      // Sheet tab not available yet — use localStorage
+    }
+
+    // Merge with localStorage entries (may have newer ones not in Sheet yet)
+    const local = JSON.parse(localStorage.getItem('wolters-tx-log')||'[]');
+    // Deduplicate: prefer Sheet data, add local entries that aren't in Sheet
+    const sheetDescs = new Set(entries.map(e=>`${e.date}|${e.kidId}|${e.desc}|${e.pts}`));
+    const localOnly = local.filter(e => !sheetDescs.has(`${e.date}|${e.kidId}|${e.desc}|${e.pts}`));
+    ALL_ENTRIES = [...localOnly, ...entries];
+
+    if (!ALL_ENTRIES.length) {
+      setStatus('No entries yet — start earning!', 'ok');
+    } else {
+      setStatus(`✓ ${ALL_ENTRIES.length} entries loaded`, 'ok');
+    }
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('controls').style.display = 'flex';
+    buildKidFilters();
+    render();
+  } catch(e) {
+    setStatus('⚠️ Could not load log. '+e.message, 'err');
+    document.getElementById('loading').textContent = '⚠️ Could not load data.';
+  }
+}
+
+function buildKidFilters() {
+  const el = document.getElementById('kid-filters');
+  const kids = [
+    { id:'all', label:'All Kids', dot:'#FF9A3C', bg:'rgba(255,154,60,0.08)', c:'#FF9A3C' },
+    ...Object.entries(KID_COLORS).map(([id,k])=>({ id, label:`${k.emoji} ${k.name}`, dot:k.dot, bg:k.bg, c:k.c }))
+  ];
+  el.innerHTML = kids.map(k=>`
+    <button class="kf-btn${activeKid===k.id?' active':''}"
+      style="--c:${k.c};--bg:${k.bg}"
+      onclick="setKidFilter('${k.id}')">${k.label}</button>`).join('');
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('btn-today').className = 'view-btn'+(v==='today'?' active':'');
+  document.getElementById('btn-all').className   = 'view-btn'+(v==='all'  ?' active':'');
+  render();
+}
+
+function setKidFilter(kid) {
+  activeKid = kid;
+  buildKidFilters();
+  render();
+}
+
+function render() {
+  const today = getTodayStr();
+  let entries = ALL_ENTRIES;
+
+  // Kid filter
+  if (activeKid !== 'all') entries = entries.filter(e=>e.kidId===activeKid);
+
+  // View filter
+  if (currentView === 'today') entries = entries.filter(e=>e.date===today);
+
+  const main = document.getElementById('main');
+  if (!entries.length) {
+    main.innerHTML = `<div class="empty-msg">No entries${currentView==='today'?' today yet — check back tonight ☀️':''}</div>`;
+    return;
+  }
+
+  // Group by date
+  const byDate = {};
+  entries.forEach(e => {
+    if (!byDate[e.date]) byDate[e.date] = [];
+    byDate[e.date].push(e);
+  });
+
+  let html = '';
+  Object.entries(byDate).forEach(([date, dayEntries], idx) => {
+    const total = dayEntries.reduce((s,e)=>s+e.pts, 0);
+    const totalStr = total>=0?`+${total}`:String(total);
+
+    // Per-kid summary for this day
+    const kidTotals = {};
+    dayEntries.forEach(e=>{
+      kidTotals[e.kidId] = (kidTotals[e.kidId]||0)+e.pts;
+    });
+
+    const summaryCards = Object.entries(KID_COLORS).map(([id,k])=>{
+      const pts = kidTotals[id]||0;
+      if (!pts) return '';
+      const ptsStr = pts>=0?`+${pts}`:String(pts);
+      return `<div class="summary-card">
+        <span class="sc-emoji">${k.emoji}</span>
+        <div class="sc-name">${k.name}</div>
+        <span class="sc-pts ${pts>=0?'pos':'neg'}">${ptsStr}</span>
+        <div class="sc-label">pts today</div>
+      </div>`;
+    }).filter(Boolean).join('');
+
+    const entryRows = dayEntries.map(e => {
+      const k = KID_COLORS[e.kidId] || { dot:'#AAA' };
+      const ptsStr = e.pts>=0?`+${e.pts}`:String(e.pts);
+      return `<div class="log-entry">
+        <div class="log-kid-dot" style="background:${k.dot}"></div>
+        <div class="log-emoji">${e.emoji||'⭐'}</div>
+        <div class="log-desc">${e.desc}</div>
+        <div class="log-kid-name">${k.name||e.kidId}</div>
+        <div class="log-pts ${e.pts>=0?'pos':'neg'}">${ptsStr}</div>
+      </div>`;
+    }).join('');
+
+    const groupId = `day-${idx}`;
+    html += `<div class="day-group" id="${groupId}">
+      <!-- Print receipt header (hidden on screen) -->
+      <div class="print-receipt-header">
+        <div>
+          <div class="print-receipt-title">📒 Wolters Daily Log — ${date}</div>
+          <div class="print-receipt-sub">Wolters Summer Vacation Points 2026 · mjwolters93-wrn.github.io/Kids-Chores-Points</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Boogaloo',cursive;font-size:1.2rem">${totalStr} pts</div>
+          <div style="font-size:0.7rem;font-weight:800;color:#888">${dayEntries.length} entries</div>
+        </div>
+      </div>
+
+      <div class="day-header">
+        <div>
+          <div class="day-title">📅 ${date}</div>
+          <div class="day-meta">${dayEntries.length} entries · ${totalStr} pts</div>
+        </div>
+        <button class="day-print-btn" onclick="printDay('${groupId}')">🖨️ Print This Day</button>
+      </div>
+
+      ${summaryCards ? `<div class="summary-row">${summaryCards}</div>` : ''}
+      ${entryRows}
+    </div>`;
+  });
+
+  main.innerHTML = html;
+}
+
+function printDay(groupId) {
+  document.querySelectorAll('.day-group').forEach(el=>el.classList.remove('printing'));
+  document.getElementById(groupId).classList.add('printing');
+  window.print();
+  setTimeout(()=>document.querySelectorAll('.day-group').forEach(el=>el.classList.remove('printing')), 500);
+}
+
+window.addEventListener('DOMContentLoaded', load);
+</script>
+</body>
+</html>
